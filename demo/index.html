@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Localizer</title>
+	<script src="ISO8601-Localizer.js"></script>
+	<script src="bower_components/code-highlighter/code-highlighter.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Noto+Sans:400italic' rel='stylesheet' type='text/css'>
+	<script>
+
+		/*
+		
+		This code is used for responsive example only, the actual use is:
+	
+		new ISO8601('2015-06-02T14:32:47').get();
+
+		or
+
+		new ISO8601( new Date().toISOString() ).get();
+
+		*/
+
+		(function(window, document, undefined) {
+
+			var utils = {
+
+				addListener: function(el, type, fn) {
+
+		            el.addEventListener(type, fn, false);
+
+		        },
+
+		        removeListener: function(el, type, fn) {
+		        
+		            el.removeEventListener(type, fn, false);
+		        
+		        }
+
+			}
+
+			utils.addListener(window, 'load', function(){
+
+				function intervalCallback() {
+					var toISOString = new Date().toISOString();
+					inp.value = toISOString.slice(0, toISOString.lastIndexOf('.'));
+					try {
+							
+						result.innerHTML = new ISO8601(toISOString).get();
+						inp.className = 'valid';
+
+					} catch( err ) {
+
+						inp.className = 'invalid';
+
+					}
+				}
+
+				function keyDownUpCallback() {
+
+					try {
+							
+						result.innerHTML = new ISO8601(inp.value).get();
+						inp.className = 'valid';
+
+					} catch( err ) {
+
+						inp.className = 'invalid';
+
+					}
+
+				}
+
+				var inp = document.querySelector('input[name]');
+				var result = document.getElementById('result');
+
+				var interval = setInterval(intervalCallback, 1000);
+
+				utils.addListener(inp, 'focus', function() {
+
+					inp.value = '';
+
+
+					clearInterval(interval);
+
+					utils.addListener(inp, 'keydown', keyDownUpCallback);
+					utils.addListener(inp, 'keyup', keyDownUpCallback);
+
+				});
+
+				utils.addListener(inp, 'blur', function() {
+
+					utils.removeListener(inp, 'keydown', keyDownUpCallback);
+					utils.removeListener(inp, 'keyup', keyDownUpCallback);
+
+					interval = setInterval(intervalCallback, 1000);
+
+				});
+
+			});
+
+		})(window, document)
+
+	</script>
+
+	<style>
+
+	/* Demo stylesheet */
+	html {
+
+		background-color: #f5f5f5;
+		color: #333;
+		font-family: 'Noto Sans', sans-serif;
+	}
+
+	body {
+		margin: 0;
+	}
+
+	p {
+		background-color: #fafafa;
+		padding: 5px;
+	}
+
+	div {
+		padding: 20px;
+	}
+
+	p, div {
+		border-bottom: 2px solid #ddd;
+		text-align: center;
+		margin: 0;
+	}
+
+	div p {
+		padding: 25px;
+		border: 0;
+		text-align: left;
+	}
+
+	h4 {
+		text-align: left;
+	}
+	
+	h2 {
+		font-weight: normal;
+		background-color: #ddd;
+		color: #333;
+		padding: 10px 0;
+		text-align: center;
+		margin: 0;
+	}
+
+	.code-highlighter {
+		margin: 20px auto;
+		width: 750px;
+		padding: 10px;
+	}
+	
+	input.valid {
+		background-color: #dff0d8;
+	}
+
+	input.invalid {
+		background-color: #f2dede;
+	}
+
+	input, #result {
+		background-color: #fff9e3;
+		border: 2px solid #ddd;
+		width: 750px;
+		display: block;
+		padding: 25px 50px;
+		margin: 20px auto;
+		text-align: center;
+		font-size: 2.3em;
+		color: #333;
+	}
+
+	.smaller {
+		font-size: 1.2em;
+	}
+	</style>
+</head>
+<body>
+	<section>
+		
+		<h2>Usage</h2>
+
+		<textarea class="code-highlighter" data-syntax="javascript" data-lines="1em" data-color-scheme="apple" data-abs-width>
+
+// ISO8601 you got from a database or some API
+var localizeMe = '2015-03-14T14:32:50';
+
+// Or maybe...
+var alreadyLocalized = new Date(); // Already localized...
+
+// But what if...
+var localizeMe = alreadyLocalized.toISOString(); // Not localized anymore but in ISO8601 format.
+
+/*
+The try-catch blocks are for invalid ISO8601 or non logical date such
+as April 31(there are only 30 days in April), for those cases the
+framework will throw an error.
+*/
+
+try {
+
+	var localized = new ISO8601Localizer(localizeMe).get();
+
+} catch (e) {
+
+	// Handle the error here.
+
+}
+</textarea>
+
+	<h2>Valid/Invalid formats</h2>
+
+	<p>ISO8601 have many formats, the framework require just part of the format...</p>
+		
+	<div>
+		
+		<h4>Valid</h4>
+		<p>2012-06-12T13:14:15 <small>( That is all the framework need )</small></p>
+		<p>2012-06-12t13:14:15 <small>( Lowercase t will also work )</small></p>
+		<p>blabla2012-06-12T13:14:15blabla <small>( Even some blabla will work )</small></p>
+		<p>2015-06-14T16:11:51.678Z <small>(Time zone and second fractions ignored)</small></p>
+		
+	</div>
+	
+	<div>
+		
+		<h4>Invalid</h4>
+		<p>2012-6-12T13:14:15 <small>( Missing 0 before 6 )</small></p>
+		<p>2012-06-12G13:14:15 <small>( G instead of T or t )</small></p>
+		<p>blabla2012-06-12blabla13:14:15blabla <small>( blabla in the middle )</small></p>
+		<p>015-06-14T16:11:51.678Z <small>(4 digists year, not 3)</small></p>
+
+	</div>
+
+	<h2 class="smaller">Invalid ISO8601 will thrown an error, so while playing with the live example below, open the console</h2>
+		<input type="text" name="ISO8601">
+		<h2>&darr;</h2>	
+		<section id="result"></section>
+	</section>
+</body>
+</html>

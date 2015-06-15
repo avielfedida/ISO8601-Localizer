@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "outDir": "./",
+        "out": "ISO8601-Localizer.js",
+        "sourceMap": true,
+        "removeComments": true,
+        "target": "es5",
+        "watch": true
+    },
+    "files": [
+        "ISO8601-Localizer.ts"
+    ]
+}
