@@ -71,6 +71,6 @@ Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result wil
 
 Feel free to contact me at `avielfedida@gmail.com`.
 
-###### Version: `1.0.0`
+###### Version: `1.0.1`
 
 ###### License: `MIT`

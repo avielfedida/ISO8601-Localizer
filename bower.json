@@ -8,7 +8,7 @@
   ],
   "description": "Simple to use getTimezoneOffset based ISO8601 localizer with source written in typescript",
   "license": "MIT",
-  "ignore": ["./images"],
+  "ignore": ["logo"],
   "keywords": [
     "js",
     "iso8601-localizer",
