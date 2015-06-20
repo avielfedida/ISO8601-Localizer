@@ -1,5 +1,5 @@
 <p align="center">
-	<img height="135" width="387" src="http://imagizer.imageshack.us/a/img540/1338/qL3t1V.png">
+	<img height="135" width="387" src="http://i.imgur.com/vbcjpkX.png">
 </p>
 
 ---
@@ -20,7 +20,7 @@ Simply include `code-highlighter.min.js` anywhere within your page and add:
 <textarea data-syntax="php" class="code-highlighter" data-url="code/location"></textarea>
 ```
 
-There are 5 color schemes for the moment that you can add via `data-color-scheme="schemeName"`:
+There are 7 color schemes for the moment that you can add via `data-color-scheme="schemeName"`:
 
 ```html
 <textarea data-syntax="php" data-color-scheme="apple" class="code-highlighter" data-url="code/location"></textarea>
@@ -42,7 +42,7 @@ The above attributes are the most basic attributes for using code highlighter, b
 
 2. `data-abs-width`(**optional**) is used to include the element padding within the element width(`box-sizing`: `border-box`).
 
-3. `data-scroll="down"`(**single value for now, the attribute is optional**), if the attribute presented you must pick a value, if you won't add this attribute which personally I think you **shouldn't** because the default rules are `overflow-x` and `overflow-y` to `auto` and you can set(or not) with `width` and `height`, here are the other options:
+3. `data-scroll="down"`(**single value for now, the attribute is optional**), if the attribute presented you must pick a value, if you won't add this attribute which personally I think you **shouldn't** because the default rules are `overflow-x` and `overflow-y` to `auto` and you can set(or not) the `width` and `height`, here are the other options:
 
 	* Pick `down` if you want only vertical scrolling, horizontal code **will break**, there is no horizontal scrolling.
 
@@ -77,10 +77,12 @@ Well not exactly, I did take care of almost everything, but there are rules that
 ## Supported color schemes:
 
 1. Apple, white background color scheme.
-1. Banana, black background color scheme.
-1. Peach, black background color scheme.
-1. Melon, white background color scheme.
-1. Mango, white background color scheme.
+2. Banana, black background color scheme.
+3. Peach, black background color scheme.
+4. Melon, white background color scheme.
+5. Mango, white background color scheme.
+6. Olive, black background color scheme.
+7. Orange, white background color scheme.
 
 if you won't pick a color scheme via `data-color-scheme` the `apple` color scheme will be chosen by default.
 
@@ -133,6 +135,6 @@ If you open up `code-highlighter.js` you will find out that there is about **60%
 
 Feel free to contact me at `avielfedida@gmail.com`.
 
-###### Version: `1.0.1`
+###### Version: `1.0.8`
 
 ###### License: `MIT`
