@@ -4,19 +4,19 @@
 	<meta charset="UTF-8">
 	<title>Localizer</title>
 	<script src="ISO8601-Localizer.js"></script>
-	<script src="bower_components/code-highlighter/code-highlighter.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/code-highlighter/1.1.1/code-highlighter.min.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Noto+Sans:400italic' rel='stylesheet' type='text/css'>
 	<script>
 
 		/*
-		
+
 		This code is used for responsive example only, the actual use is:
-	
-		new ISO8601('2015-06-02T14:32:47').get();
+
+		new ISO8601Localizer('2015-06-02T14:32:47').get();
 
 		or
 
-		new ISO8601( new Date().toISOString() ).get();
+		new ISO8601Localizer( new Date().toISOString() ).get();
 
 		*/
 
@@ -31,9 +31,9 @@
 		        },
 
 		        removeListener: function(el, type, fn) {
-		        
+
 		            el.removeEventListener(type, fn, false);
-		        
+
 		        }
 
 			}
@@ -44,8 +44,8 @@
 					var toISOString = new Date().toISOString();
 					inp.value = toISOString.slice(0, toISOString.lastIndexOf('.'));
 					try {
-							
-						result.innerHTML = new ISO8601(toISOString).get();
+
+						result.innerHTML = new ISO8601Localizer(toISOString).get();
 						inp.className = 'valid';
 
 					} catch( err ) {
@@ -58,7 +58,7 @@
 				function keyDownUpCallback() {
 
 					try {
-							
+
 						result.innerHTML = new ISO8601(inp.value).get();
 						inp.className = 'valid';
 
@@ -140,7 +140,7 @@
 	h4 {
 		text-align: left;
 	}
-	
+
 	h2 {
 		font-weight: normal;
 		background-color: #ddd;
@@ -155,7 +155,7 @@
 		width: 750px;
 		padding: 10px;
 	}
-	
+
 	input.valid {
 		background-color: #dff0d8;
 	}
@@ -183,19 +183,20 @@
 </head>
 <body>
 	<section>
-		
+
 		<h2>Usage</h2>
 
-		<textarea class="code-highlighter" data-syntax="javascript" data-lines="1em" data-color-scheme="apple" data-abs-width>
-
-// ISO8601 you got from a database or some API
+		<textarea class="code-highlighter" data-syntax="javascript" data-lines="1em" data-color-scheme="papaya">
+// ISO8601 you got from a database or API
 var localizeMe = '2015-03-14T14:32:50';
 
-// Or maybe...
-var alreadyLocalized = new Date(); // Already localized...
+// You may want to get your own ISO8601 Localized string, those are the steps:
+var alreadyLocalized = new Date();
 
-// But what if...
-var localizeMe = alreadyLocalized.toISOString(); // Not localized anymore but in ISO8601 format.
+// A new Date object won't contain ISO8601, so to do
+// so we use toISOString, BUT the returned ISO8601 won't be localized,
+// for that we will ISO8601Localizer within the try block below.
+var localizeMe = alreadyLocalized.toISOString();
 
 /*
 The try-catch blocks are for invalid ISO8601 or non logical date such
@@ -217,19 +218,19 @@ try {
 	<h2>Valid/Invalid formats</h2>
 
 	<p>ISO8601 have many formats, the framework require just part of the format...</p>
-		
+
 	<div>
-		
+
 		<h4>Valid</h4>
 		<p>2012-06-12T13:14:15 <small>( That is all the framework need )</small></p>
 		<p>2012-06-12t13:14:15 <small>( Lowercase t will also work )</small></p>
 		<p>blabla2012-06-12T13:14:15blabla <small>( Even some blabla will work )</small></p>
 		<p>2015-06-14T16:11:51.678Z <small>(Time zone and second fractions ignored)</small></p>
-		
+
 	</div>
-	
+
 	<div>
-		
+
 		<h4>Invalid</h4>
 		<p>2012-6-12T13:14:15 <small>( Missing 0 before 6 )</small></p>
 		<p>2012-06-12G13:14:15 <small>( G instead of T or t )</small></p>
@@ -240,7 +241,7 @@ try {
 
 	<h2 class="smaller">Invalid ISO8601 will thrown an error, so while playing with the live example below, open the console</h2>
 		<input type="text" name="ISO8601">
-		<h2>&darr;</h2>	
+		<h2>&darr;</h2>
 		<section id="result"></section>
 	</section>
 </body>

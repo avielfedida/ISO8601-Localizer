@@ -20,17 +20,19 @@ var localizeMe = '2015-06-02T14:13:12';
 var localized = new ISO8601Localizer(localizeMe).get();
 ```
 
-A full use I suggest will be as:
+A full use would be:
 
 ```javascript
 // ISO8601 you got from a database or API
 var localizeMe = '2015-03-14T14:32:50';
 
-// Or maybe...
-var alreadyLocalized = new Date(); // Already localized...
+// You may want to get your own ISO8601 Localized string, those are the steps:
+var alreadyLocalized = new Date();
 
-// But what if...
-var localizeMe = alreadyLocalized.toISOString(); // Not localized anymore but in ISO8601 format.
+// A new Date object won't contain ISO8601, so to do
+// so we use toISOString, BUT the returned ISO8601 won't be localized,
+// for that we will ISO8601Localizer within the try block below.
+var localizeMe = alreadyLocalized.toISOString();
 
 /*
 The try-catch blocks are for invalid ISO8601 or non logical date such
