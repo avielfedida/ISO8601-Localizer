@@ -1,39 +1,30 @@
 /// <reference path="typings/tsd.d.ts" />
 
+/// <reference path="lib/interfaces.ts" />
+/// <reference path="lib/monthsDetails.ts" />
 
-/// <reference path="lib/interfaces/generic.ts" />
-/// <reference path="lib/arrays/monthsDetails.ts" />
-
-
-import GI = GenericInterfaces;
-import MT = monthsDetails;
-
-
-class ISO8601 implements GI.getCompliant<string> {
+class ISO8601Localizer implements interfaces.genericGet<string> {
 
     private userOffset: number;
 
-    // Stricted(example): 2013-01-05T04:13:00
+    private userISO8601: string;
+
+    // Partially Stricted(no ^ and $): 2013-01-05T04:13:00
     private ISO8601Pattern: RegExp = /(\d{4})-([0-1][0-9])-([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])/;
 
-    public constructor( private userISO8601: string ) {
+    public constructor( userISO8601: string ) {
 
+        this.userISO8601 = userISO8601;
         this.setOffset( new Date );
 
     }
 
-    private isLogical(maxDays: number, day: number) {
-
-        return day <= maxDays;
-
-    }
-
-    public get() {
+    public get(): string {
 
         let upperCaseISO8601 = this.userISO8601.toUpperCase();
 
         if( ! this.isValid(upperCaseISO8601) ) throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
-        
+
         let { offsetHours,  operator } = this.getOffset();
 
         let matchStrings: string[] = upperCaseISO8601.match(this.ISO8601Pattern);
@@ -51,16 +42,16 @@ class ISO8601 implements GI.getCompliant<string> {
         let leapYear: boolean = this.isLeapYear( year );
 
         // -1 is because monthsDays have 0 index.
-        let daysInMonth = MT.monthsDays[month - 1];
+        let daysInMonth = monthsDetails.monthsDays[month - 1];
 
-        if(leapYear && month === 2) { // 2 === Feb, On Feb while leap year, there are 29 days and not 28 
+        if(leapYear && month === 2) { // 2 === Feb, On Feb while leap year, there are 29 days and not 28
 
             daysInMonth = 29; // daysInMonth = 29 instead of daysInMonth++ is used for expressivity.
 
         }
 
         if( ! this.isLogical(daysInMonth, day)) throw 'Non logical date, please check that there are X days in month Y.';
-        
+
         // DIM stands for days in month, its use is explained inside the operator === '-' if statement.
         let previousMonthDIM = (function() {
 
@@ -68,16 +59,16 @@ class ISO8601 implements GI.getCompliant<string> {
 
             if(month - 2 < 0) {
 
-                return MT.monthsDays[ 12 + ( month - 2 ) ];
+                return monthsDetails.monthsDays[ 12 + ( month - 2 ) ];
 
             }
 
-            return MT.monthsDays[ month - 2 ];
+            return monthsDetails.monthsDays[ month - 2 ];
 
         })();
-        
-        if(leapYear && month === 3) { // 3 === Feb, previous month is Feb, On Feb while leap year, there are 29 days and not 28 
-            
+
+        if(leapYear && month === 3) { // 3 === Feb, previous month is Feb, On Feb while leap year, there are 29 days and not 28
+
             previousMonthDIM = 29; // daysInMonth = 29 instead of daysInMonth++ is used for expressivity.
 
         }
@@ -91,13 +82,13 @@ class ISO8601 implements GI.getCompliant<string> {
         if(operator === '+') {
 
             let newHour = hour = hour + offsetHours;                     // ---------- Final(maybe)
-            
+
             if(newHour > 23) {
 
                 let addDays = Math.floor( newHour / 24 );
                 let remainingHours = hour = newHour % 24;               // ---------- Final
                 let newDay = day = day + addDays;                       // ---------- Final(maybe)
-                
+
                 if(newDay > daysInMonth) {
 
                     let newerDay = day = newDay - daysInMonth;           // ---------- Final
@@ -116,11 +107,10 @@ class ISO8601 implements GI.getCompliant<string> {
 
         }
 
-
         if(operator === '-') {
 
             let newHour = hour = hour - offsetHours;                      // ---------- Final(maybe)
-            
+
             if(newHour < 1) {
 
                 /*
@@ -142,11 +132,11 @@ class ISO8601 implements GI.getCompliant<string> {
                 newHour = Math.abs( newHour ) + 24;
 
                 let decreaseDays = Math.floor( newHour / 24 );
-                
+
                 let remainingHours = hour = 24 - ( newHour % 24 );   // ---------- Final(maybe)
 
                 if(newHour === 0) {
-                
+
                     decreaseDays = 1;
 
                     /*
@@ -157,10 +147,9 @@ class ISO8601 implements GI.getCompliant<string> {
                     remainingHours = hour = 0;                       // ---------- Final
 
                 }
-                
 
                 let newDay = day = day - decreaseDays;                // ---------- Final(maybe)
-                
+
                 /*
                 This if statement is very special, if newDay is smaller than 1, then it set the
                 newerDay and the day to be..... previousMonthDIM + newDay and not newDay - daysInMonth.
@@ -171,7 +160,7 @@ class ISO8601 implements GI.getCompliant<string> {
                 When newDay equals 0, no days will be decreased from the previous month max days.
                 */
                 if(newDay < 1) {
-                    
+
                     let newerDay = day = previousMonthDIM + newDay;    // ---------- Final
                     let newMonth = month = month - 1;                  // ---------- Final(maybe)
 
@@ -198,17 +187,23 @@ class ISO8601 implements GI.getCompliant<string> {
             stringedISO8601.push(toStringISO8601.length === 1 ? "0" + toStringISO8601 : toStringISO8601);
 
         }
-        
+
         return  stringedISO8601[0] + '-' +
                 stringedISO8601[1] + '-' +
                 stringedISO8601[2] + 'T' +
                 stringedISO8601[3] + ':' +
                 stringedISO8601[4] + ':' +
                 stringedISO8601[5];
-    
+
     }
 
-    private getOffset() {
+    private isLogical(maxDays: number, day: number): boolean {
+
+        return day <= maxDays;
+
+    }
+
+    private getOffset(): interfaces.offsetObject {
 
         let offset = this.userOffset;
 
@@ -238,7 +233,7 @@ class ISO8601 implements GI.getCompliant<string> {
 
     }
 
-    private setOffset(date: Date) {
+    private setOffset(date: Date): void {
 
             this.userOffset = date.getTimezoneOffset() / -60;
 

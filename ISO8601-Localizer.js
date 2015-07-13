@@ -16,17 +16,15 @@ var monthsDetails;
     ];
 })(monthsDetails || (monthsDetails = {}));
 /// <reference path="typings/tsd.d.ts" />
-var MT = monthsDetails;
-var ISO8601 = (function () {
-    function ISO8601(userISO8601) {
-        this.userISO8601 = userISO8601;
+/// <reference path="lib/interfaces.ts" />
+/// <reference path="lib/monthsDetails.ts" />
+var ISO8601Localizer = (function () {
+    function ISO8601Localizer(userISO8601) {
         this.ISO8601Pattern = /(\d{4})-([0-1][0-9])-([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])/;
+        this.userISO8601 = userISO8601;
         this.setOffset(new Date);
     }
-    ISO8601.prototype.isLogical = function (maxDays, day) {
-        return day <= maxDays;
-    };
-    ISO8601.prototype.get = function () {
+    ISO8601Localizer.prototype.get = function () {
         var upperCaseISO8601 = this.userISO8601.toUpperCase();
         if (!this.isValid(upperCaseISO8601))
             throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
@@ -38,7 +36,7 @@ var ISO8601 = (function () {
         });
         var year = matchNumbers[0], month = matchNumbers[1], day = matchNumbers[2], hour = matchNumbers[3], minute = matchNumbers[4], second = matchNumbers[5];
         var leapYear = this.isLeapYear(year);
-        var daysInMonth = MT.monthsDays[month - 1];
+        var daysInMonth = monthsDetails.monthsDays[month - 1];
         if (leapYear && month === 2) {
             daysInMonth = 29;
         }
@@ -47,9 +45,9 @@ var ISO8601 = (function () {
         var previousMonthDIM = (function () {
             // The -2 used because -1 due to monthsDays have 0 index and -1 because we need the previous month.
             if (month - 2 < 0) {
-                return MT.monthsDays[12 + (month - 2)];
+                return monthsDetails.monthsDays[12 + (month - 2)];
             }
-            return MT.monthsDays[month - 2];
+            return monthsDetails.monthsDays[month - 2];
         })();
         if (leapYear && month === 3) {
             previousMonthDIM = 29;
@@ -107,7 +105,10 @@ var ISO8601 = (function () {
             stringedISO8601[4] + ':' +
             stringedISO8601[5];
     };
-    ISO8601.prototype.getOffset = function () {
+    ISO8601Localizer.prototype.isLogical = function (maxDays, day) {
+        return day <= maxDays;
+    };
+    ISO8601Localizer.prototype.getOffset = function () {
         var offset = this.userOffset;
         return {
             operator: (function () {
@@ -124,13 +125,13 @@ var ISO8601 = (function () {
             offsetHours: Math.abs(offset)
         };
     };
-    ISO8601.prototype.setOffset = function (date) {
+    ISO8601Localizer.prototype.setOffset = function (date) {
         this.userOffset = date.getTimezoneOffset() / -60;
     };
-    ISO8601.prototype.isValid = function (maybeValid) {
+    ISO8601Localizer.prototype.isValid = function (maybeValid) {
         return this.ISO8601Pattern.test(maybeValid);
     };
-    ISO8601.prototype.isLeapYear = function (year) {
+    ISO8601Localizer.prototype.isLeapYear = function (year) {
         /*
             Mathisfun(https://www.mathsisfun.com/leap-years.html):
 
@@ -144,6 +145,6 @@ var ISO8601 = (function () {
             ||
                 (year % 4 === 0 && year % 100 === 0 && year % 400 === 0));
     };
-    return ISO8601;
+    return ISO8601Localizer;
 })();
 //# sourceMappingURL=ISO8601-Localizer.js.map
