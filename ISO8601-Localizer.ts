@@ -219,17 +219,29 @@ class ISO8601Localizer implements ILocalizer {
     }
 
     private errorThrower(errorCode: number): void {
+
       switch(errorCode) {
+
         case 0:
-          throw 'Invalid offset supplied, valid offsets are between -11 to 14'
+
+          throw 'Invalid offset supplied, valid offsets are between -11 to 14';
+
         break;
+
         case 1:
+
           throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
+
         break;
+
         case 2:
+
           throw 'Non logical date, please check that there are X days in month Y.';
+
         break;
+
         default:
+
           throw 'Unknow error code.';
 
       }
