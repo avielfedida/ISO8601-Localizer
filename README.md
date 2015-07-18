@@ -9,7 +9,7 @@
 ## Installation
 
 ```
-bower install ISO8601-Localizer
+bower install iso8601-localizer
 ```
 
 Include `ISO8601-Localizer.js` before the `js` code using it, at the code:
