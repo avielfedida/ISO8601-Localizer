@@ -1,6 +1,6 @@
-var monthsDetails;
-(function (monthsDetails) {
-    monthsDetails.monthsDays = [
+var arrays;
+(function (arrays) {
+    arrays.monthsDays = [
         31,
         28,
         31,
@@ -14,20 +14,90 @@ var monthsDetails;
         30,
         31
     ];
-})(monthsDetails || (monthsDetails = {}));
+})(arrays || (arrays = {}));
+var classes;
+(function (classes) {
+    var Ranger = (function () {
+        function Ranger() {
+        }
+        Ranger.prototype.getRange = function (start, end) {
+            /*
+            There are 6 parameters combination:
+      
+            1. (5, 7)
+            2. (7, 5)
+            3. (7, 7)
+            4. (-5, -7)
+            5. (-7, -5)
+            6. (-7, -7)
+            7. (5, -7)
+            8. (-7, 5)
+      
+            This function will return an ordered range for the parameters, for example:
+      
+            (5, 7) or (7, 5) => [5,6,7]
+            (-7, 5) or (5, -7) => [-7,-6,-5,-4,-3,-2,-1,0,1,2,4,5]
+            (-7, -7) => [-7]
+            (5, 5) => [5]
+            */
+            var notBothNegativeTmp = null, bothNegativeTmp = null, bothNegativeFlag = false, retArray = [];
+            if (start < 0 && end < 0) {
+                start = Math.abs(start);
+                end = Math.abs(end);
+                bothNegativeFlag = true;
+                if (start > end) {
+                    bothNegativeTmp = end;
+                    end = start;
+                    start = bothNegativeTmp;
+                }
+            }
+            else {
+                if (start > end) {
+                    notBothNegativeTmp = end;
+                    end = start;
+                    start = notBothNegativeTmp;
+                }
+            }
+            for (var i = start; i <= end; i++) {
+                if (bothNegativeFlag) {
+                    retArray.push(-i);
+                }
+                else {
+                    retArray.push(i);
+                }
+            }
+            return retArray;
+        };
+        return Ranger;
+    })();
+    classes.Ranger = Ranger;
+})(classes || (classes = {}));
 /// <reference path="typings/tsd.d.ts" />
 /// <reference path="lib/interfaces.ts" />
-/// <reference path="lib/monthsDetails.ts" />
+/// <reference path="lib/arrays.ts" />
+/// <reference path="lib/classes.ts" />
+var monthsDays = arrays.monthsDays;
+var Ranger = classes.Ranger;
 var ISO8601Localizer = (function () {
     function ISO8601Localizer(userISO8601) {
         this.ISO8601Pattern = /(\d{4})-([0-1][0-9])-([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])/;
         this.userISO8601 = userISO8601;
-        this.setOffset(new Date);
+        this.userOffset = new Date().getTimezoneOffset() / -60;
+        ;
     }
-    ISO8601Localizer.prototype.get = function () {
+    ISO8601Localizer.prototype.to = function (offset) {
+        if (!this.validOffset(offset)) {
+            this.errorThrower(0);
+        }
+        ;
+        this.userOffset = offset;
+        return this;
+    };
+    ISO8601Localizer.prototype.localize = function () {
         var upperCaseISO8601 = this.userISO8601.toUpperCase();
-        if (!this.isValid(upperCaseISO8601))
-            throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
+        if (!this.isValid(upperCaseISO8601)) {
+            this.errorThrower(1);
+        }
         var _a = this.getOffset(), offsetHours = _a.offsetHours, operator = _a.operator;
         var matchStrings = upperCaseISO8601.match(this.ISO8601Pattern);
         var fullMatch = matchStrings.shift();
@@ -36,18 +106,19 @@ var ISO8601Localizer = (function () {
         });
         var year = matchNumbers[0], month = matchNumbers[1], day = matchNumbers[2], hour = matchNumbers[3], minute = matchNumbers[4], second = matchNumbers[5];
         var leapYear = this.isLeapYear(year);
-        var daysInMonth = monthsDetails.monthsDays[month - 1];
+        var daysInMonth = monthsDays[month - 1];
         if (leapYear && month === 2) {
             daysInMonth = 29;
         }
-        if (!this.isLogical(daysInMonth, day))
-            throw 'Non logical date, please check that there are X days in month Y.';
+        if (!this.isLogical(daysInMonth, day)) {
+            this.errorThrower(2);
+        }
         var previousMonthDIM = (function () {
             // The -2 used because -1 due to monthsDays have 0 index and -1 because we need the previous month.
             if (month - 2 < 0) {
-                return monthsDetails.monthsDays[12 + (month - 2)];
+                return monthsDays[12 + (month - 2)];
             }
-            return monthsDetails.monthsDays[month - 2];
+            return monthsDays[month - 2];
         })();
         if (leapYear && month === 3) {
             previousMonthDIM = 29;
@@ -105,6 +176,21 @@ var ISO8601Localizer = (function () {
             stringedISO8601[4] + ':' +
             stringedISO8601[5];
     };
+    ISO8601Localizer.prototype.errorThrower = function (errorCode) {
+        switch (errorCode) {
+            case 0:
+                throw 'Invalid offset supplied, valid offsets are between -11 to 14';
+                break;
+            case 1:
+                throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
+                break;
+            case 2:
+                throw 'Non logical date, please check that there are X days in month Y.';
+                break;
+            default:
+                throw 'Unknow error code.';
+        }
+    };
     ISO8601Localizer.prototype.isLogical = function (maxDays, day) {
         return day <= maxDays;
     };
@@ -125,8 +211,10 @@ var ISO8601Localizer = (function () {
             offsetHours: Math.abs(offset)
         };
     };
-    ISO8601Localizer.prototype.setOffset = function (date) {
-        this.userOffset = date.getTimezoneOffset() / -60;
+    ISO8601Localizer.prototype.validOffset = function (offset) {
+        var RangerInstance = new Ranger();
+        var validOffsets = RangerInstance.getRange(-11, 14);
+        return validOffsets.indexOf(offset) > -1 ? true : false;
     };
     ISO8601Localizer.prototype.isValid = function (maybeValid) {
         return this.ISO8601Pattern.test(maybeValid);
@@ -147,4 +235,3 @@ var ISO8601Localizer = (function () {
     };
     return ISO8601Localizer;
 })();
-//# sourceMappingURL=ISO8601-Localizer.js.map

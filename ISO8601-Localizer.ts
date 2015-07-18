@@ -1,9 +1,14 @@
 /// <reference path="typings/tsd.d.ts" />
-
 /// <reference path="lib/interfaces.ts" />
-/// <reference path="lib/monthsDetails.ts" />
+/// <reference path="lib/arrays.ts" />
+/// <reference path="lib/classes.ts" />
 
-class ISO8601Localizer implements interfaces.genericGet<string> {
+import monthsDays = arrays.monthsDays;
+import Ranger = classes.Ranger;
+import ILocalizer = interfaces.localizer;
+import IOffsetObject = interfaces.offsetObject;
+
+class ISO8601Localizer implements ILocalizer {
 
     private userOffset: number;
 
@@ -15,15 +20,29 @@ class ISO8601Localizer implements interfaces.genericGet<string> {
     public constructor( userISO8601: string ) {
 
         this.userISO8601 = userISO8601;
-        this.setOffset( new Date );
+        this.userOffset = new Date().getTimezoneOffset() / -60;;
 
     }
 
-    public get(): string {
+    public to(offset: number): ILocalizer {
+
+      if( ! this.validOffset(offset)) {
+        this.errorThrower(0);
+      };
+
+      this.userOffset = offset;
+
+      return this;
+
+    }
+
+    public localize(): string {
 
         let upperCaseISO8601 = this.userISO8601.toUpperCase();
 
-        if( ! this.isValid(upperCaseISO8601) ) throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
+        if( ! this.isValid(upperCaseISO8601) ) {
+          this.errorThrower(1);
+        }
 
         let { offsetHours,  operator } = this.getOffset();
 
@@ -42,7 +61,7 @@ class ISO8601Localizer implements interfaces.genericGet<string> {
         let leapYear: boolean = this.isLeapYear( year );
 
         // -1 is because monthsDays have 0 index.
-        let daysInMonth = monthsDetails.monthsDays[month - 1];
+        let daysInMonth = monthsDays[month - 1];
 
         if(leapYear && month === 2) { // 2 === Feb, On Feb while leap year, there are 29 days and not 28
 
@@ -50,7 +69,9 @@ class ISO8601Localizer implements interfaces.genericGet<string> {
 
         }
 
-        if( ! this.isLogical(daysInMonth, day)) throw 'Non logical date, please check that there are X days in month Y.';
+        if( ! this.isLogical(daysInMonth, day)) {
+          this.errorThrower(2);
+        }
 
         // DIM stands for days in month, its use is explained inside the operator === '-' if statement.
         let previousMonthDIM = (function() {
@@ -59,11 +80,11 @@ class ISO8601Localizer implements interfaces.genericGet<string> {
 
             if(month - 2 < 0) {
 
-                return monthsDetails.monthsDays[ 12 + ( month - 2 ) ];
+                return monthsDays[ 12 + ( month - 2 ) ];
 
             }
 
-            return monthsDetails.monthsDays[ month - 2 ];
+            return monthsDays[ month - 2 ];
 
         })();
 
@@ -197,13 +218,30 @@ class ISO8601Localizer implements interfaces.genericGet<string> {
 
     }
 
+    private errorThrower(errorCode: number): void {
+      switch(errorCode) {
+        case 0:
+          throw 'Invalid offset supplied, valid offsets are between -11 to 14'
+        break;
+        case 1:
+          throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
+        break;
+        case 2:
+          throw 'Non logical date, please check that there are X days in month Y.';
+        break;
+        default:
+          throw 'Unknow error code.';
+
+      }
+    }
+
     private isLogical(maxDays: number, day: number): boolean {
 
         return day <= maxDays;
 
     }
 
-    private getOffset(): interfaces.offsetObject {
+    private getOffset(): IOffsetObject {
 
         let offset = this.userOffset;
 
@@ -233,9 +271,12 @@ class ISO8601Localizer implements interfaces.genericGet<string> {
 
     }
 
-    private setOffset(date: Date): void {
+    private validOffset(offset: number): boolean {
 
-            this.userOffset = date.getTimezoneOffset() / -60;
+      let RangerInstance = new Ranger();
+      let validOffsets: Array<number> = RangerInstance.getRange(-11, 14);
+
+      return validOffsets.indexOf(offset) > -1 ? true : false;
 
     }
 

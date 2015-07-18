@@ -5,8 +5,9 @@ module interfaces {
     offsetHours: number;
   }
 
-  export interface genericGet<T> {
-    get(): T;
+  export interface localizer {
+    to(offset: number): localizer,
+    localize(): string;
   }
 
 }

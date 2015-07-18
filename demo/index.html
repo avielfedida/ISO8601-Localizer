@@ -20,7 +20,7 @@
 
 		*/
 
-		(function(window, document, undefined) {
+		(function(window, document) {
 
 			var utils = {
 
@@ -45,11 +45,11 @@
 					inp.value = toISOString.slice(0, toISOString.lastIndexOf('.'));
 					try {
 
-						result.innerHTML = new ISO8601Localizer(toISOString).get();
+						result.innerHTML = new ISO8601Localizer(toISOString).localize();
 						inp.className = 'valid';
 
 					} catch( err ) {
-
+						console.log(err);
 						inp.className = 'invalid';
 
 					}
@@ -59,11 +59,11 @@
 
 					try {
 
-						result.innerHTML = new ISO8601(inp.value).get();
+						result.innerHTML = new ISO8601Localizer(inp.value).localize();
 						inp.className = 'valid';
 
 					} catch( err ) {
-
+						console.log(err);
 						inp.className = 'invalid';
 
 					}
@@ -76,9 +76,6 @@
 				var interval = setInterval(intervalCallback, 1000);
 
 				utils.addListener(inp, 'focus', function() {
-
-					inp.value = '';
-
 
 					clearInterval(interval);
 
@@ -107,8 +104,8 @@
 	/* Demo stylesheet */
 	html {
 
-		background-color: #f5f5f5;
-		color: #333;
+		background-color: silver;
+		color: #555;
 		font-family: 'Noto Sans', sans-serif;
 	}
 
@@ -116,8 +113,12 @@
 		margin: 0;
 	}
 
+	section {
+		text-align: center;
+	}
+
 	p {
-		background-color: #fafafa;
+		background-color: #ccc;
 		padding: 5px;
 	}
 
@@ -126,7 +127,6 @@
 	}
 
 	p, div {
-		border-bottom: 2px solid #ddd;
 		text-align: center;
 		margin: 0;
 	}
@@ -137,14 +137,17 @@
 		text-align: left;
 	}
 
-	h4 {
-		text-align: left;
+	h3 {
+		padding: 5px;
+		color: #fff;
+		margin-bottom: 0;
+		background-color: #888;
 	}
 
 	h2 {
 		font-weight: normal;
-		background-color: #ddd;
-		color: #333;
+		background-color: #777;
+		color: #fff;
 		padding: 10px 0;
 		text-align: center;
 		margin: 0;
@@ -156,24 +159,31 @@
 		padding: 10px;
 	}
 
+	span.center {
+		background-color: #777;
+		color: #fff;
+		padding: 10px 15px;
+		font-size: 1.2em;
+	}
+
 	input.valid {
-		background-color: #dff0d8;
+		background-color: #51AA61;
 	}
 
 	input.invalid {
-		background-color: #f2dede;
+		background-color: #D0173E;
 	}
 
 	input, #result {
-		background-color: #fff9e3;
-		border: 2px solid #ddd;
+		background-color: #777;
 		width: 750px;
+		border: none;
 		display: block;
 		padding: 25px 50px;
 		margin: 20px auto;
 		text-align: center;
 		font-size: 2.3em;
-		color: #333;
+		color: #fff;
 	}
 
 	.smaller {
@@ -186,42 +196,59 @@
 
 		<h2>Usage</h2>
 
-		<textarea class="code-highlighter" data-syntax="javascript" data-lines="1em" data-color-scheme="papaya">
-// ISO8601 you got from a database or API
+		<textarea class="code-highlighter" data-syntax="javascript" data-lines="1em" data-color-scheme="apple">
+// There are 2 cases I can't think of for using this framework:
+
+/************************ FIRST CASE ****************************/
+// The common use is when you get the ISO8601 out of a database or API
 var localizeMe = '2015-03-14T14:32:50';
 
-// You may want to get your own ISO8601 Localized string, those are the steps:
+/************************ SECOND CASE ***************************/
+// If you want to get your own ISO8601 there is a trick for that:
+// Those are the steps:
 var alreadyLocalized = new Date();
 
-// A new Date object won't contain ISO8601, so to do
+// A new Date object won't be formatted in ISO8601, so to do
 // so we use toISOString, BUT the returned ISO8601 won't be localized,
 // for that we will ISO8601Localizer within the try block below.
 var localizeMe = alreadyLocalized.toISOString();
 
 /*
-The try-catch blocks are for invalid ISO8601 or non logical date such
-as April 31(there are only 30 days in April), for those cases the
-framework will throw an error.
+No matter how you obtained your ISO8601, ISO8601Localizer will
+throw errors for invalid ISO8601 format or non logical date such
+as April 31(there are 30 days in April), use a try catch blocks:
 */
 
 try {
 
-	var localized = new ISO8601Localizer(localizeMe).get();
+  var localized = new ISO8601Localizer(localizeMe).localize();
 
-} catch (e) {
+} catch (e) { /* Handle the error here. */ }
 
-	// Handle the error here.
+// The to method:
+/*
+You may decide to localize a given ISO8601 but not to your own offset,
+but to another offset, take a look here: http://www.timeanddate.com/time/map/
 
-}
+Now to figure out what is the offset you need, checkout: http://www.timeanddate.com/time/zone/
+
+The valid offsets are between -11 to 14, and here is the usage:
+*/
+
+try {
+
+  var localized = new ISO8601Localizer(localizeMe).to(-5).localize();
+
+} catch (e) { /* Handle the error here. */ }
 </textarea>
 
 	<h2>Valid/Invalid formats</h2>
 
-	<p>ISO8601 have many formats, the framework require just part of the format...</p>
+	<p>ISO8601 has many formats, the framework require takes a specific format...</p>
 
 	<div>
 
-		<h4>Valid</h4>
+		<h3>Valid</h3>
 		<p>2012-06-12T13:14:15 <small>( That is all the framework need )</small></p>
 		<p>2012-06-12t13:14:15 <small>( Lowercase t will also work )</small></p>
 		<p>blabla2012-06-12T13:14:15blabla <small>( Even some blabla will work )</small></p>
@@ -231,7 +258,7 @@ try {
 
 	<div>
 
-		<h4>Invalid</h4>
+		<h3>Invalid</h3>
 		<p>2012-6-12T13:14:15 <small>( Missing 0 before 6 )</small></p>
 		<p>2012-06-12G13:14:15 <small>( G instead of T or t )</small></p>
 		<p>blabla2012-06-12blabla13:14:15blabla <small>( blabla in the middle )</small></p>
@@ -241,7 +268,7 @@ try {
 
 	<h2 class="smaller">Invalid ISO8601 will thrown an error, so while playing with the live example below, open the console</h2>
 		<input type="text" name="ISO8601">
-		<h2>&darr;</h2>
+		<span class="center">&darr;</span>
 		<section id="result"></section>
 	</section>
 </body>
