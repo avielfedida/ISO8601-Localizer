@@ -1,14 +1,14 @@
 {
   "name": "ISO8601-Localizer",
-  "main": "ISO8601-Localizer.js",
-  "version": "1.0.3",
+  "main": "ISO8601-Localizer.min.js",
+  "version": "1.0.4",
   "homepage": "https://github.com/avielfedida/ISO8601-Localizer",
   "authors": [
     "Aviel Fedida <avielfedida@gmail.com>"
   ],
   "description": "Simple to use getTimezoneOffset based ISO8601 localizer with source written in typescript",
   "license": "MIT",
-  "ignore": ["logo", "lib", "typings", "tsd.json", "ISO8601-Localizer.ts", "ISO8601-Localizer.js.map", "README.md", "LICENSE", "tsconfig.json", "tsd.json", ".gitignore"],
+  "ignore": ["logo", "ISO8601-Localizer.js", "lib", "typings", "tsd.json", "ISO8601-Localizer.ts", "ISO8601-Localizer.js.map", "README.md", "LICENSE", "tsconfig.json", "tsd.json", ".gitignore"],
   "keywords": [
     "js",
     "iso8601-localizer",
