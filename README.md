@@ -12,6 +12,8 @@
 bower install iso8601-localizer
 ```
 
+Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.4/iso8601-localizer.min.js`
+
 Include `ISO8601-Localizer.js` before the `js` code using it, at the code:
 
 ```javascript
