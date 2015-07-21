@@ -1,13 +1,17 @@
-module interfaces {
+module lib {
 
-  export interface offsetObject {
-    operator: string;
-    offsetHours: number;
+  export module interfaces {
+
+    export interface offsetObject {
+      operator: string;
+      offsetHours: number;
+    }
+
+    export interface localizer {
+      to(offset: number): localizer,
+      localize(): string;
+    }
+
   }
-
-  export interface localizer {
-    to(offset: number): localizer,
-    localize(): string;
-  }
-
+  
 }

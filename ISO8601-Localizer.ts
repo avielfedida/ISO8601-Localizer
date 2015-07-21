@@ -3,12 +3,7 @@
 /// <reference path="lib/arrays.ts" />
 /// <reference path="lib/classes.ts" />
 
-import monthsDays = arrays.monthsDays;
-import Ranger = classes.Ranger;
-import ILocalizer = interfaces.localizer;
-import IOffsetObject = interfaces.offsetObject;
-
-class ISO8601Localizer implements ILocalizer {
+class ISO8601Localizer implements lib.interfaces.localizer {
 
     private userOffset: number;
 
@@ -24,7 +19,7 @@ class ISO8601Localizer implements ILocalizer {
 
     }
 
-    public to(offset: number): ILocalizer {
+    public to(offset: number): lib.interfaces.localizer {
 
       if( ! this.validOffset(offset)) {
         this.errorThrower(0);
@@ -60,8 +55,8 @@ class ISO8601Localizer implements ILocalizer {
 
         let leapYear: boolean = this.isLeapYear( year );
 
-        // -1 is because monthsDays have 0 index.
-        let daysInMonth = monthsDays[month - 1];
+        // -1 is because lib.arrays.monthsDays have 0 index.
+        let daysInMonth = lib.arrays.monthsDays[month - 1];
 
         if(leapYear && month === 2) { // 2 === Feb, On Feb while leap year, there are 29 days and not 28
 
@@ -76,15 +71,15 @@ class ISO8601Localizer implements ILocalizer {
         // DIM stands for days in month, its use is explained inside the operator === '-' if statement.
         let previousMonthDIM = (function() {
 
-            // The -2 used because -1 due to monthsDays have 0 index and -1 because we need the previous month.
+            // The -2 used because -1 due to lib.arrays.monthsDays have 0 index and -1 because we need the previous month.
 
             if(month - 2 < 0) {
 
-                return monthsDays[ 12 + ( month - 2 ) ];
+                return lib.arrays.monthsDays[ 12 + ( month - 2 ) ];
 
             }
 
-            return monthsDays[ month - 2 ];
+            return lib.arrays.monthsDays[ month - 2 ];
 
         })();
 
@@ -253,7 +248,7 @@ class ISO8601Localizer implements ILocalizer {
 
     }
 
-    private getOffset(): IOffsetObject {
+    private getOffset(): lib.interfaces.offsetObject {
 
         let offset = this.userOffset;
 
@@ -285,7 +280,7 @@ class ISO8601Localizer implements ILocalizer {
 
     private validOffset(offset: number): boolean {
 
-      let RangerInstance = new Ranger();
+      let RangerInstance = new lib.classes.Ranger();
       let validOffsets: Array<number> = RangerInstance.getRange(-11, 14);
 
       return validOffsets.indexOf(offset) > -1 ? true : false;

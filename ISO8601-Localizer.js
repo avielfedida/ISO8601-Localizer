@@ -1,83 +1,87 @@
-var arrays;
-(function (arrays) {
-    arrays.monthsDays = [
-        31,
-        28,
-        31,
-        30,
-        31,
-        30,
-        31,
-        31,
-        30,
-        31,
-        30,
-        31
-    ];
-})(arrays || (arrays = {}));
-var classes;
-(function (classes) {
-    var Ranger = (function () {
-        function Ranger() {
-        }
-        Ranger.prototype.getRange = function (start, end) {
-            /*
-            There are 6 parameters combination:
-      
-            1. (5, 7)
-            2. (7, 5)
-            3. (7, 7)
-            4. (-5, -7)
-            5. (-7, -5)
-            6. (-7, -7)
-            7. (5, -7)
-            8. (-7, 5)
-      
-            This function will return an ordered range for the parameters, for example:
-      
-            (5, 7) or (7, 5) => [5,6,7]
-            (-7, 5) or (5, -7) => [-7,-6,-5,-4,-3,-2,-1,0,1,2,4,5]
-            (-7, -7) => [-7]
-            (5, 5) => [5]
-            */
-            var notBothNegativeTmp = null, bothNegativeTmp = null, bothNegativeFlag = false, retArray = [];
-            if (start < 0 && end < 0) {
-                start = Math.abs(start);
-                end = Math.abs(end);
-                bothNegativeFlag = true;
-                if (start > end) {
-                    bothNegativeTmp = end;
-                    end = start;
-                    start = bothNegativeTmp;
-                }
+var lib;
+(function (lib) {
+    var arrays;
+    (function (arrays) {
+        arrays.monthsDays = [
+            31,
+            28,
+            31,
+            30,
+            31,
+            30,
+            31,
+            31,
+            30,
+            31,
+            30,
+            31
+        ];
+    })(arrays = lib.arrays || (lib.arrays = {}));
+})(lib || (lib = {}));
+var lib;
+(function (lib) {
+    var classes;
+    (function (classes) {
+        var Ranger = (function () {
+            function Ranger() {
             }
-            else {
-                if (start > end) {
-                    notBothNegativeTmp = end;
-                    end = start;
-                    start = notBothNegativeTmp;
-                }
-            }
-            for (var i = start; i <= end; i++) {
-                if (bothNegativeFlag) {
-                    retArray.push(-i);
+            Ranger.prototype.getRange = function (start, end) {
+                /*
+                There are 6 parameters combination:
+      
+                1. (5, 7)
+                2. (7, 5)
+                3. (7, 7)
+                4. (-5, -7)
+                5. (-7, -5)
+                6. (-7, -7)
+                7. (5, -7)
+                8. (-7, 5)
+      
+                This function will return an ordered range for the parameters, for example:
+      
+                (5, 7) or (7, 5) => [5,6,7]
+                (-7, 5) or (5, -7) => [-7,-6,-5,-4,-3,-2,-1,0,1,2,4,5]
+                (-7, -7) => [-7]
+                (5, 5) => [5]
+                */
+                var notBothNegativeTmp = null, bothNegativeTmp = null, bothNegativeFlag = false, retArray = [];
+                if (start < 0 && end < 0) {
+                    start = Math.abs(start);
+                    end = Math.abs(end);
+                    bothNegativeFlag = true;
+                    if (start > end) {
+                        bothNegativeTmp = end;
+                        end = start;
+                        start = bothNegativeTmp;
+                    }
                 }
                 else {
-                    retArray.push(i);
+                    if (start > end) {
+                        notBothNegativeTmp = end;
+                        end = start;
+                        start = notBothNegativeTmp;
+                    }
                 }
-            }
-            return retArray;
-        };
-        return Ranger;
-    })();
-    classes.Ranger = Ranger;
-})(classes || (classes = {}));
+                for (var i = start; i <= end; i++) {
+                    if (bothNegativeFlag) {
+                        retArray.push(-i);
+                    }
+                    else {
+                        retArray.push(i);
+                    }
+                }
+                return retArray;
+            };
+            return Ranger;
+        })();
+        classes.Ranger = Ranger;
+    })(classes = lib.classes || (lib.classes = {}));
+})(lib || (lib = {}));
 /// <reference path="typings/tsd.d.ts" />
 /// <reference path="lib/interfaces.ts" />
 /// <reference path="lib/arrays.ts" />
 /// <reference path="lib/classes.ts" />
-var monthsDays = arrays.monthsDays;
-var Ranger = classes.Ranger;
 var ISO8601Localizer = (function () {
     function ISO8601Localizer(userISO8601) {
         this.ISO8601Pattern = /(\d{4})-([0-1][0-9])-([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])/;
@@ -106,7 +110,7 @@ var ISO8601Localizer = (function () {
         });
         var year = matchNumbers[0], month = matchNumbers[1], day = matchNumbers[2], hour = matchNumbers[3], minute = matchNumbers[4], second = matchNumbers[5];
         var leapYear = this.isLeapYear(year);
-        var daysInMonth = monthsDays[month - 1];
+        var daysInMonth = lib.arrays.monthsDays[month - 1];
         if (leapYear && month === 2) {
             daysInMonth = 29;
         }
@@ -114,11 +118,11 @@ var ISO8601Localizer = (function () {
             this.errorThrower(2);
         }
         var previousMonthDIM = (function () {
-            // The -2 used because -1 due to monthsDays have 0 index and -1 because we need the previous month.
+            // The -2 used because -1 due to lib.arrays.monthsDays have 0 index and -1 because we need the previous month.
             if (month - 2 < 0) {
-                return monthsDays[12 + (month - 2)];
+                return lib.arrays.monthsDays[12 + (month - 2)];
             }
-            return monthsDays[month - 2];
+            return lib.arrays.monthsDays[month - 2];
         })();
         if (leapYear && month === 3) {
             previousMonthDIM = 29;
@@ -212,7 +216,7 @@ var ISO8601Localizer = (function () {
         };
     };
     ISO8601Localizer.prototype.validOffset = function (offset) {
-        var RangerInstance = new Ranger();
+        var RangerInstance = new lib.classes.Ranger();
         var validOffsets = RangerInstance.getRange(-11, 14);
         return validOffsets.indexOf(offset) > -1 ? true : false;
     };

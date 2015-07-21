@@ -1,86 +1,90 @@
-module classes {
+module lib {
 
-	export class Ranger {
+	export module classes {
 
-    public getRange(start: number, end: number): Array<number> {
+		export class Ranger {
 
-      /*
-      There are 6 parameters combination:
+	    public getRange(start: number, end: number): Array<number> {
 
-      1. (5, 7)
-      2. (7, 5)
-      3. (7, 7)
-      4. (-5, -7)
-      5. (-7, -5)
-      6. (-7, -7)
-      7. (5, -7)
-      8. (-7, 5)
+	      /*
+	      There are 6 parameters combination:
 
-      This function will return an ordered range for the parameters, for example:
+	      1. (5, 7)
+	      2. (7, 5)
+	      3. (7, 7)
+	      4. (-5, -7)
+	      5. (-7, -5)
+	      6. (-7, -7)
+	      7. (5, -7)
+	      8. (-7, 5)
 
-      (5, 7) or (7, 5) => [5,6,7]
-      (-7, 5) or (5, -7) => [-7,-6,-5,-4,-3,-2,-1,0,1,2,4,5]
-      (-7, -7) => [-7]
-      (5, 5) => [5]
-      */
+	      This function will return an ordered range for the parameters, for example:
 
-      var notBothNegativeTmp = null,
-          bothNegativeTmp = null,
-          bothNegativeFlag: boolean = false,
-          retArray: Array<number> = [];
+	      (5, 7) or (7, 5) => [5,6,7]
+	      (-7, 5) or (5, -7) => [-7,-6,-5,-4,-3,-2,-1,0,1,2,4,5]
+	      (-7, -7) => [-7]
+	      (5, 5) => [5]
+	      */
 
-      if(start < 0 && end < 0) {
+	      var notBothNegativeTmp = null,
+	          bothNegativeTmp = null,
+	          bothNegativeFlag: boolean = false,
+	          retArray: Array<number> = [];
 
-          start = Math.abs(start);
+	      if(start < 0 && end < 0) {
 
-          end = Math.abs(end);
+	          start = Math.abs(start);
 
-          bothNegativeFlag = true;
+	          end = Math.abs(end);
 
-          // For cases like: (-7, -5)
-          if(start > end) {
+	          bothNegativeFlag = true;
 
-              bothNegativeTmp = end;
+	          // For cases like: (-7, -5)
+	          if(start > end) {
 
-              end = start;
+	              bothNegativeTmp = end;
 
-              start = bothNegativeTmp;
+	              end = start;
 
-          } // Else, for cases like: (-5, -7), (-7, -7)
+	              start = bothNegativeTmp;
 
-      } else {
+	          } // Else, for cases like: (-5, -7), (-7, -7)
 
-        // For cases like: (7, 5), (5, -7)
-        if(start > end) {
+	      } else {
 
-          notBothNegativeTmp = end;
+	        // For cases like: (7, 5), (5, -7)
+	        if(start > end) {
 
-          end = start;
+	          notBothNegativeTmp = end;
 
-          start = notBothNegativeTmp;
+	          end = start;
 
-        } // Else, for cases like: (5, 7), (7, 7), (7, 7), (-7, 5)
+	          start = notBothNegativeTmp;
 
-      }
+	        } // Else, for cases like: (5, 7), (7, 7), (7, 7), (-7, 5)
 
-      for(let i = start; i <= end; i++) {
+	      }
 
-        if(bothNegativeFlag) {
+	      for(let i = start; i <= end; i++) {
 
-           retArray.push(-i);
+	        if(bothNegativeFlag) {
 
-        } else {
+	           retArray.push(-i);
 
-           retArray.push(i);
+	        } else {
 
-        }
+	           retArray.push(i);
 
-      }
+	        }
 
-      return retArray;
+	      }
 
-    }
+	      return retArray;
 
-  }
+	    }
 
+	  }
+
+	}
+	
 }
