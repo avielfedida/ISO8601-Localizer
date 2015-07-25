@@ -19,6 +19,8 @@ bower install iso8601-localizer
 
 Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.4/iso8601-localizer.min.js`
 
+## How to use
+
 ```javascript
 // ISO8601 obtained from database or API
 var localizeMe = '2015-06-02T14:13:12';
