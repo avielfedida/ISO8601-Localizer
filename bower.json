@@ -8,7 +8,7 @@
   ],
   "description": "Simple to use getTimezoneOffset based ISO8601 localizer with source written in typescript",
   "license": "MIT",
-  "ignore": ["updateProcess.md", "logo", "ISO8601-Localizer.js", "lib", "typings", "tsd.json", "ISO8601-Localizer.ts", "ISO8601-Localizer.js.map", "README.md", "LICENSE", "tsconfig.json", "tsd.json", ".gitignore"],
+  "ignore": [".npmignore", "updateProcess.md", "logo", "ISO8601-Localizer.js", "lib", "typings", "tsd.json", "ISO8601-Localizer.ts", "README.md", "LICENSE", "tsconfig.json", "tsd.json", ".gitignore"],
   "keywords": [
     "js",
     "iso8601-localizer",

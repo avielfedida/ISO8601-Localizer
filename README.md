@@ -8,13 +8,16 @@
 
 ## Installation
 
+Node users:
+```
+npm install iso8601-localizer
+```
+Client-side users:
 ```
 bower install iso8601-localizer
 ```
 
 Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.4/iso8601-localizer.min.js`
-
-Include `ISO8601-Localizer.js` before the `js` code using it, at the code:
 
 ```javascript
 // ISO8601 obtained from database or API
@@ -79,6 +82,7 @@ Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result wil
 1. The source code is based on `Typescript` so if you love typescript as I do you will find it useful.
 2. You can localize a given ISO8601 not only to your offset but a given offfset.
 3. Support for leap years(add accuracy).
+4. Use it as a client-side framework or a Node module.
 
 **Enjoy !**
 
