@@ -1,9 +1,12 @@
 /// <reference path="typings/tsd.d.ts" />
-/// <reference path="lib/interfaces.ts" />
-/// <reference path="lib/arrays.ts" />
-/// <reference path="lib/classes.ts" />
 
-class ISO8601Localizer implements lib.interfaces.localizer {
+import interfaces = require('./lib/interfaces');
+import arrays = require('./lib/arrays');
+import classes = require('./lib/classes');
+
+export = ISO8601Localizer;
+
+class ISO8601Localizer implements interfaces.localizer {
 
     private userOffset: number;
 
@@ -19,7 +22,7 @@ class ISO8601Localizer implements lib.interfaces.localizer {
 
     }
 
-    public to(offset: number): lib.interfaces.localizer {
+    public to(offset: number): interfaces.localizer {
 
       if( ! this.validOffset(offset)) {
         this.errorThrower(0);
@@ -31,6 +34,7 @@ class ISO8601Localizer implements lib.interfaces.localizer {
 
     }
 
+    // There are few variables set here for clarification and never used such as: newerDay, newerMonth and newYear.
     public localize(): string {
 
         let upperCaseISO8601 = this.userISO8601.toUpperCase();
@@ -55,8 +59,8 @@ class ISO8601Localizer implements lib.interfaces.localizer {
 
         let leapYear: boolean = this.isLeapYear( year );
 
-        // -1 is because lib.arrays.monthsDays have 0 index.
-        let daysInMonth = lib.arrays.monthsDays[month - 1];
+        // -1 is because arrays.monthsDays have 0 index.
+        let daysInMonth = arrays.monthsDays[month - 1];
 
         if(leapYear && month === 2) { // 2 === Feb, On Feb while leap year, there are 29 days and not 28
 
@@ -71,15 +75,15 @@ class ISO8601Localizer implements lib.interfaces.localizer {
         // DIM stands for days in month, its use is explained inside the operator === '-' if statement.
         let previousMonthDIM = (function() {
 
-            // The -2 used because -1 due to lib.arrays.monthsDays have 0 index and -1 because we need the previous month.
+            // The -2 used because -1 due to arrays.monthsDays have 0 index and -1 because we need the previous month.
 
             if(month - 2 < 0) {
 
-                return lib.arrays.monthsDays[ 12 + ( month - 2 ) ];
+                return arrays.monthsDays[ 12 + ( month - 2 ) ];
 
             }
 
-            return lib.arrays.monthsDays[ month - 2 ];
+            return arrays.monthsDays[ month - 2 ];
 
         })();
 
@@ -213,6 +217,7 @@ class ISO8601Localizer implements lib.interfaces.localizer {
 
     }
 
+    // I removed the break statements below due to the throw statements(the break will never be reached).
     private errorThrower(errorCode: number): void {
 
       switch(errorCode) {
@@ -221,19 +226,13 @@ class ISO8601Localizer implements lib.interfaces.localizer {
 
           throw 'Invalid offset supplied, valid offsets are between -11 to 14';
 
-        break;
-
         case 1:
 
           throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
 
-        break;
-
         case 2:
 
           throw 'Non logical date, please check that there are X days in month Y.';
-
-        break;
 
         default:
 
@@ -248,7 +247,7 @@ class ISO8601Localizer implements lib.interfaces.localizer {
 
     }
 
-    private getOffset(): lib.interfaces.offsetObject {
+    private getOffset(): interfaces.offsetObject {
 
         let offset = this.userOffset;
 
@@ -280,7 +279,7 @@ class ISO8601Localizer implements lib.interfaces.localizer {
 
     private validOffset(offset: number): boolean {
 
-      let RangerInstance = new lib.classes.Ranger();
+      let RangerInstance = new classes.Ranger();
       let validOffsets: Array<number> = RangerInstance.getRange(-11, 14);
 
       return validOffsets.indexOf(offset) > -1 ? true : false;

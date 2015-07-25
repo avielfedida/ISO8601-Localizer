@@ -1,0 +1,20 @@
+{
+  "name": "ISO8601-Localizer",
+  "version": "1.0.6",
+  "description": "Simple to use getTimezoneOffset based ISO8601 localizer with source written in Typescript",
+  "main": "ISO8601-Localizer.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/avielfedida/ISO8601-Localizer.git"
+  },
+  "author": "Aviel Fedida <avielfedida@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/avielfedida/ISO8601-Localizer",
+  "keywords": [
+    "js",
+    "iso8601-localizer",
+    "iso8601",
+    "localizer",
+    "typescript"
+  ]
+}
