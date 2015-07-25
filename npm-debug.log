@@ -1,0 +1,104 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files (x86)\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.35
+4 verbose node symlink C:\Program Files (x86)\nodejs\\node.exe
+5 verbose publish [ '.' ]
+6 verbose cache add [ '.', null ]
+7 verbose cache add name=undefined spec="." args=[".",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: '.',
+8 verbose parsed url   path: '.',
+8 verbose parsed url   href: '.' }
+9 silly lockFile 3a52ce78- .
+10 verbose lock . C:\Users\aviel\AppData\Roaming\npm-cache\3a52ce78-.lock
+11 verbose tar pack [ 'C:\\Users\\aviel\\AppData\\Roaming\\npm-cache\\ISO8601-Localizer\\1.0.6\\package.tgz',
+11 verbose tar pack   '.' ]
+12 verbose tarball C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package.tgz
+13 verbose folder .
+14 info prepublish ISO8601-Localizer@1.0.6
+15 silly lockFile 1f1177db-tar tar://.
+16 verbose lock tar://. C:\Users\aviel\AppData\Roaming\npm-cache\1f1177db-tar.lock
+17 silly lockFile 0b6e31dc-8601-Localizer-1-0-6-package-tgz tar://C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package.tgz
+18 verbose lock tar://C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package.tgz C:\Users\aviel\AppData\Roaming\npm-cache\0b6e31dc-8601-Localizer-1-0-6-package-tgz.lock
+19 silly lockFile 1f1177db-tar tar://.
+20 silly lockFile 1f1177db-tar tar://.
+21 silly lockFile 0b6e31dc-8601-Localizer-1-0-6-package-tgz tar://C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package.tgz
+22 silly lockFile 0b6e31dc-8601-Localizer-1-0-6-package-tgz tar://C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package.tgz
+23 silly lockFile 61f25190--ISO8601-Localizer-1-0-6-package C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package
+24 verbose lock C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package C:\Users\aviel\AppData\Roaming\npm-cache\61f25190--ISO8601-Localizer-1-0-6-package.lock
+25 silly lockFile 61f25190--ISO8601-Localizer-1-0-6-package C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package
+26 silly lockFile 61f25190--ISO8601-Localizer-1-0-6-package C:\Users\aviel\AppData\Roaming\npm-cache\ISO8601-Localizer\1.0.6\package
+27 silly lockFile 3a52ce78- .
+28 silly lockFile 3a52ce78- .
+29 silly publish { name: 'ISO8601-Localizer',
+29 silly publish   version: '1.0.6',
+29 silly publish   description: 'Simple to use getTimezoneOffset based ISO8601 localizer with source written in Typescript',
+29 silly publish   main: 'ISO8601-Localizer.js',
+29 silly publish   repository:
+29 silly publish    { type: 'git',
+29 silly publish      url: 'https://github.com/avielfedida/ISO8601-Localizer.git' },
+29 silly publish   author: { name: 'Aviel Fedida', email: 'avielfedida@gmail.com' },
+29 silly publish   license: 'MIT',
+29 silly publish   homepage: 'https://github.com/avielfedida/ISO8601-Localizer',
+29 silly publish   keywords: [ 'js', 'iso8601-localizer', 'iso8601', 'localizer', 'typescript' ],
+29 silly publish   readme: '<p align="center">\r\n\t<img height="181" width="150" src="http://i.imgur.com/070F7jH.png">\r\n</p>\r\n\r\n---\r\n\r\n> Simple to use getTimezoneOffset based ISO8601 localizer with source written in Typescript\r\n\r\n## Installation\r\n\r\n```\r\nbower install iso8601-localizer\r\n```\r\n\r\nOr would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.4/iso8601-localizer.min.js`\r\n\r\nInclude `ISO8601-Localizer.js` before the `js` code using it, at the code:\r\n\r\n```javascript\r\n// ISO8601 obtained from database or API\r\nvar localizeMe = \'2015-06-02T14:13:12\';\r\n\r\nvar localized = new ISO8601Localizer(localizeMe).localize();\r\n```\r\n\r\nIf you just need your own `time/date` in ISO8601 format, there is a trick for that:\r\n\r\n```javascript\r\nvar alreadyLocalized = new Date();\r\n\r\n// A new Date object won\'t be formatted in ISO8601, so to do\r\n// so we use toISOString, BUT the returned ISO8601 won\'t be localized,\r\n// for that we will ISO8601Localizer within the try block below.\r\nvar localizeMe = alreadyLocalized.toISOString();\r\n\r\n/*\r\nNo matter how you obtained your ISO8601, ISO8601Localizer will\r\nthrow errors for invalid ISO8601 format or non logical date such\r\nas April 31(there are 30 days in April), use a try catch blocks:\r\n*/\r\n\r\ntry {\r\n\r\n  var localized = new ISO8601Localizer(localizeMe).localize();\r\n\r\n} catch (e) { /* Handle the error here. */ }\r\n```\r\n\r\n## The to method\r\n\r\nYou may decide to localize a given ISO8601 but not to your own offset,\r\nbut to another offset, take a look [here](http://www.timeanddate.com/time/map/).\r\n\r\nNow to figure out what is the offset you need, checkout [timeanddate](http://www.timeanddate.com/time/zone/).\r\n\r\nAnd finally the code(valid offsets are between -11 to 14):\r\n\r\n```javascript\r\ntry {\r\n\t// No matter how you obtain localizeMe.\r\n  var localized = new ISO8601Localizer(localizeMe).to(-5).localize();\r\n\r\n} catch (e) { /* Handle the error here. */ }\r\n```\r\n\r\n## Why do I need it?\r\n\r\nSome APIs will retrieve `date/time` in `ISO8601` format, the problem is that the APIs won\'t check the request\r\nlocation given your IP, so they `date/time` will be at `UTC` which probably not your local timezone, so that is why I build this framework.\r\n\r\n## How it works?\r\n\r\nJavascript have a method called `getTimezoneOffset()` you can use on `Date` objects, the method return the number of minutes negative of positive depending on you timezone, I use this value to convert a given `ISO8601` format into `ISO8601` format but now its localized.\r\n\r\nGiven `+3h` while the date/time are `2010-05-02:22:44:32`, the return result will be `2010-05-03:01:44:32`, there are more complicated case where its a leap year, or the  month need to advance, maybe the year, all cases are supported.\r\n\r\n## Features\r\n\r\n1. The source code is based on `Typescript` so if you love typescript as I do you will find it useful.\r\n2. You can localize a given ISO8601 not only to your offset but a given offfset.\r\n3. Support for leap years(add accuracy).\r\n\r\n**Enjoy !**\r\n\r\n## Contact\r\n\r\nFeel free to contact me at `avielfedida@gmail.com`.\r\n\r\n###### Version: `1.0.6`\r\n\r\n###### License: `MIT`\r\n',
+29 silly publish   readmeFilename: 'README.md',
+29 silly publish   gitHead: '55d815493c4a94f4c046200e0b25c18620cb2c4c',
+29 silly publish   bugs: { url: 'https://github.com/avielfedida/ISO8601-Localizer/issues' },
+29 silly publish   _id: 'ISO8601-Localizer@1.0.6',
+29 silly publish   scripts: {},
+29 silly publish   _shasum: '351df6bdaa08b8dc693b14399ea60219615c976a',
+29 silly publish   _from: '.' }
+30 verbose request where is /ISO8601-Localizer
+31 verbose request registry https://registry.npmjs.org/
+32 verbose request id 2c576ebafab9c35b
+33 verbose url raw /ISO8601-Localizer
+34 verbose url resolving [ 'https://registry.npmjs.org/', './ISO8601-Localizer' ]
+35 verbose url resolved https://registry.npmjs.org/ISO8601-Localizer
+36 verbose request where is https://registry.npmjs.org/ISO8601-Localizer
+37 info trying registry request attempt 1 at 21:51:05
+38 http PUT https://registry.npmjs.org/ISO8601-Localizer
+39 http 400 https://registry.npmjs.org/ISO8601-Localizer
+40 verbose headers { 'content-type': 'application/json',
+40 verbose headers   'cache-control': 'max-age=60',
+40 verbose headers   'content-length': '54',
+40 verbose headers   'accept-ranges': 'bytes',
+40 verbose headers   date: 'Sat, 25 Jul 2015 18:51:06 GMT',
+40 verbose headers   via: '1.1 varnish',
+40 verbose headers   connection: 'keep-alive',
+40 verbose headers   'x-served-by': 'cache-fra1225-FRA',
+40 verbose headers   'x-cache': 'MISS',
+40 verbose headers   'x-cache-hits': '0',
+40 verbose headers   'x-timer': 'S1437850260.711412,VS0,VE5517' }
+41 error publish Failed PUT 400
+42 error Error: name can no longer contain capital letters : ISO8601-Localizer
+42 error     at RegClient.<anonymous> (C:\Program Files (x86)\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:308:14)
+42 error     at Request._callback (C:\Program Files (x86)\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:246:65)
+42 error     at Request.self.callback (C:\Program Files (x86)\nodejs\node_modules\npm\node_modules\request\request.js:236:22)
+42 error     at Request.emit (events.js:98:17)
+42 error     at Request.<anonymous> (C:\Program Files (x86)\nodejs\node_modules\npm\node_modules\request\request.js:1142:14)
+42 error     at Request.emit (events.js:117:20)
+42 error     at IncomingMessage.<anonymous> (C:\Program Files (x86)\nodejs\node_modules\npm\node_modules\request\request.js:1096:12)
+42 error     at IncomingMessage.emit (events.js:117:20)
+42 error     at _stream_readable.js:944:16
+42 error     at process._tickCallback (node.js:442:13)
+43 error If you need help, you may report this *entire* log,
+43 error including the npm and node versions, at:
+43 error     <http://github.com/npm/npm/issues>
+44 error System Windows_NT 6.2.9200
+45 error command "C:\\Program Files (x86)\\nodejs\\\\node.exe" "C:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "publish"
+46 error cwd C:\Users\aviel\Desktop\newISO\ISO8601-Localizer
+47 error node -v v0.10.35
+48 error npm -v 1.4.28
+49 verbose exit [ 1, true ]
