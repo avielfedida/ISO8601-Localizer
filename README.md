@@ -51,6 +51,16 @@ try {
 } catch (e) { /* Handle the error here. */ }
 ```
 
+## Browserify users
+
+Simply install via `bower` then:
+
+```javascript
+var ISO8601Localizer = require('./ISO8601-Localizer');
+```
+
+Now go back to above **How to use** section.
+
 ## The to method
 
 You may decide to localize a given ISO8601 but not to your own offset,
