@@ -40,7 +40,9 @@ class ISO8601Localizer implements interfaces.localizer {
         let upperCaseISO8601 = this.userISO8601.toUpperCase();
 
         if( ! this.isValid(upperCaseISO8601) ) {
+
           this.errorThrower(1);
+
         }
 
         let { offsetHours,  operator } = this.getOffset();
@@ -198,7 +200,7 @@ class ISO8601Localizer implements interfaces.localizer {
         }
 
         let [...ISO8601]: number[] = [year, month, day, hour, minute, second];
-        let stringedISO8601: string[]  = []
+        let stringedISO8601: string[]  = [];
 
         for(let k in ISO8601) {
 
