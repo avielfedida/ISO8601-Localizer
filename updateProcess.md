@@ -6,3 +6,4 @@
 4. Bump bower.json version
 5. Bump package.json version
 6. Bump README.md version
+7. Update the cdn link version at README.md
