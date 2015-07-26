@@ -17,7 +17,7 @@ Client-side users:
 bower install iso8601-localizer
 ```
 
-Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.4/iso8601-localizer.min.js`
+Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.8/iso8601-localizer.min.js`
 
 ## How to use
 
@@ -100,7 +100,7 @@ Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result wil
 
 ## Contact
 
-Feel free to contact me at `avielfedida@gmail.com`.
+Feel free to contact me via my email: `avielfedida@gmail.com`.
 
 ###### Version: `1.0.8`
 
