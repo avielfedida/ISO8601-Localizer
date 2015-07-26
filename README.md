@@ -56,7 +56,7 @@ try {
 Simply install via `bower` then:
 
 ```javascript
-var ISO8601Localizer = require('ISO8601-Localizer');
+var ISO8601Localizer = require('iso8601-localizer');
 ```
 
 Now go back to above **How to use** section.
