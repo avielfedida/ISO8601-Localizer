@@ -186,6 +186,16 @@
 		color: #fff;
 	}
 
+	a {
+		text-decoration: none;
+		border-bottom: 1px solid #fff;
+		color: #111;
+	}
+
+	a:hover {
+		border-bottom-color: #111;
+	}
+
 	.smaller {
 		font-size: 1.2em;
 	}
@@ -194,57 +204,11 @@
 <body>
 	<section>
 
-		<h2>Usage</h2>
-
-		<textarea class="code-highlighter" data-syntax="javascript" data-lines="1em">
-// There are 2 cases I can't think of for using this framework:
-
-/************************ FIRST CASE ****************************/
-// The common use is when you get the ISO8601 out of a database or API
-var localizeMe = '2015-03-14T14:32:50';
-
-/************************ SECOND CASE ***************************/
-// If you want to get your own ISO8601 there is a trick for that:
-// Those are the steps:
-var alreadyLocalized = new Date();
-
-// A new Date object won't be formatted in ISO8601, so to do
-// so we use toISOString, BUT the returned ISO8601 won't be localized,
-// for that we will ISO8601Localizer within the try block below.
-var localizeMe = alreadyLocalized.toISOString();
-
-/*
-No matter how you obtained your ISO8601, ISO8601Localizer will
-throw errors for invalid ISO8601 format or non logical date such
-as April 31(there are 30 days in April), use a try catch blocks:
-*/
-
-try {
-
-  var localized = new ISO8601Localizer(localizeMe).localize();
-
-} catch (e) { /* Handle the error here. */ }
-
-// The to method:
-/*
-You may decide to localize a given ISO8601 but not to your own offset,
-but to another offset, take a look here: http://www.timeanddate.com/time/map/
-
-Now to figure out what is the offset you need, checkout: http://www.timeanddate.com/time/zone/
-
-The valid offsets are between -11 to 14, and here is the usage:
-*/
-
-try {
-
-  var localized = new ISO8601Localizer(localizeMe).to(-5).localize();
-
-} catch (e) { /* Handle the error here. */ }
-</textarea>
-
 	<h2>Valid/Invalid formats</h2>
 
-	<p>ISO8601 has many formats, the framework require takes a specific format...</p>
+	<p>A well described code examples and use cases are provided at the <a target="_blank" href="https://github.com/avielfedida/ISO8601-Localizer">github repository</a>.</p>
+
+	<p>ISO8601 has many formats, the framework require a specific format...</p>
 
 	<div>
 
