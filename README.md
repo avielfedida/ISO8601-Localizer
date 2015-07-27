@@ -17,7 +17,7 @@ Client-side users:
 bower install iso8601-localizer
 ```
 
-Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.8/iso8601-localizer.min.js`
+Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.9/iso8601-localizer.min.js`
 
 ## How to use
 
@@ -28,14 +28,17 @@ var localizeMe = '2015-06-02T14:13:12';
 var localized = new ISO8601Localizer(localizeMe).localize();
 ```
 
-If you just need your own `time/date` in ISO8601 format, there is a trick for that:
+Do you need your own `date/time` in ISO8601 format:
 
 ```javascript
 var alreadyLocalized = new Date();
 
-// A new Date object won't be formatted in ISO8601, so to do
-// so we use toISOString, BUT the returned ISO8601 won't be localized,
-// for that we will ISO8601Localizer within the try block below.
+/*
+A new Date object won't be formatted in ISO8601, so to do
+so we use toISOString(), BUT the returned ISO8601 won't be localized,
+it will be a UTC timezone, so to achieve a localized ISO8601
+you do need ISO8601Localizer.
+*/
 var localizeMe = alreadyLocalized.toISOString();
 
 /*
@@ -53,48 +56,42 @@ try {
 
 ## Browserify users
 
-Simply install via `bower` then:
-
+After installing via `bower` just like you would `require` a node module:
 ```javascript
 var ISO8601Localizer = require('iso8601-localizer');
 ```
 
-Now go back to above **How to use** section.
+Now go back to above **How to use** section and use as shown in those examples.
 
 ## The to method
 
 You may decide to localize a given ISO8601 but not to your own offset,
-but to another offset, take a look [here](http://www.timeanddate.com/time/map/).
+but to another offset, for more info take a look [here](http://www.timeanddate.com/time/map/).
 
 Now to figure out what is the offset you need, checkout [timeanddate](http://www.timeanddate.com/time/zone/).
 
-And finally the code(valid offsets are between -11 to 14):
+Hop you've have noticed that valid offsets are between -11 to 14:
 
 ```javascript
-try {
-	// No matter how you obtain localizeMe.
-  var localized = new ISO8601Localizer(localizeMe).to(-5).localize();
-
-} catch (e) { /* Handle the error here. */ }
+var localizedTo = new ISO8601Localizer('2015-06-02T14:13:12').to(-5).localize();
 ```
 
 ## Why do I need it?
 
-Some APIs will retrieve `date/time` in `ISO8601` format, the problem is that the APIs won't check the request
-location given your IP, so they `date/time` will be at `UTC` which probably not your local timezone, so that is why I build this framework.
+Some APIs will retrieve `date/time` in ISO8601 format, the problem is that the ISO8601 format will be
+retrieved as UTC timezone, this framework is built upon this exact idea as I experienced a UTC retrieval myself.
 
 ## How it works?
 
-Javascript have a method called `getTimezoneOffset()` you can use on `Date` objects, the method return the number of minutes negative of positive depending on you timezone, I use this value to convert a given `ISO8601` format into `ISO8601` format but now its localized.
+Javascript has a method called `getTimezoneOffset()` you can use on `Date` objects, the method return the number of minutes negative or positive depending on you timezone or a given offset(by the to() method), I use this value to localize a given ISO8601.
 
-Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result will be `2010-05-03:01:44:32`, there are more complicated case where its a leap year, or the  month need to advance, maybe the year, all cases are supported.
+Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result will be `2010-05-03:01:44:32`, there are more complicated cases such as leap year, or when the localization process forwards a month or even a year.
 
 ## Features
 
-1. The source code is based on `Typescript` so if you love typescript as I do you will find it useful.
+1. The source code is based on `Typescript` so if you love Typescript as I do you will find it useful.
 2. You can localize a given ISO8601 not only to your offset but a given offfset.
-3. Support for leap years(add accuracy).
-4. Use it as a client-side framework or a Node module.
+3. Use it as a client-side framework or a node module.
 
 **Enjoy !**
 
@@ -102,6 +99,6 @@ Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result wil
 
 Feel free to contact me via my email: `avielfedida@gmail.com`.
 
-###### Version: `1.0.8`
+###### Version: `1.0.9`
 
 ###### License: `MIT`

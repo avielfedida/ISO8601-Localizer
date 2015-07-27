@@ -15,7 +15,7 @@ module arrays {
 		30, 	// November
 		31 		// December
 
-	]
+	];
 
 }
 

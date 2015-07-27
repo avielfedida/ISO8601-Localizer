@@ -6,7 +6,6 @@ var ISO8601Localizer = (function () {
         this.ISO8601Pattern = /(\d{4})-([0-1][0-9])-([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])/;
         this.userISO8601 = userISO8601;
         this.userOffset = new Date().getTimezoneOffset() / -60;
-        ;
     }
     ISO8601Localizer.prototype.to = function (offset) {
         if (!this.validOffset(offset)) {
@@ -134,20 +133,20 @@ var ISO8601Localizer = (function () {
     ISO8601Localizer.prototype.validOffset = function (offset) {
         var RangerInstance = new classes.Ranger();
         var validOffsets = RangerInstance.getRange(-11, 14);
-        return validOffsets.indexOf(offset) > -1 ? true : false;
+        return (validOffsets.indexOf(offset) > -1) ? true : false;
     };
     ISO8601Localizer.prototype.isValid = function (maybeValid) {
         return this.ISO8601Pattern.test(maybeValid);
     };
     ISO8601Localizer.prototype.isLeapYear = function (year) {
         /*
-            Mathisfun(https://www.mathsisfun.com/leap-years.html):
+        Mathisfun(https://www.mathsisfun.com/leap-years.html):
 
-            "
-            Leap Years are any year that can be evenly divided by 4 (such as 2012, 2016, etc),
-            except if it can can be evenly divided by 100, then it isn't (such as 2100, 2200, etc),
-            except if it can be evenly divided by 400, then it is (such as 2000, 2400).
-            "
+        "
+        Leap Years are any year that can be evenly divided by 4 (such as 2012, 2016, etc),
+        except if it can can be evenly divided by 100, then it isn't (such as 2100, 2200, etc),
+        except if it can be evenly divided by 400, then it is (such as 2000, 2400).
+        "
         */
         return ((year % 4 === 0 && year % 100 !== 0)
             ||

@@ -18,7 +18,7 @@ class ISO8601Localizer implements interfaces.localizer {
     public constructor( userISO8601: string ) {
 
         this.userISO8601 = userISO8601;
-        this.userOffset = new Date().getTimezoneOffset() / -60;;
+        this.userOffset = new Date().getTimezoneOffset() / -60;
 
     }
 
@@ -71,7 +71,9 @@ class ISO8601Localizer implements interfaces.localizer {
         }
 
         if( ! this.isLogical(daysInMonth, day)) {
+
           this.errorThrower(2);
+
         }
 
         // DIM stands for days in month, its use is explained inside the operator === '-' if statement.
@@ -241,6 +243,7 @@ class ISO8601Localizer implements interfaces.localizer {
           throw 'Unknow error code.';
 
       }
+
     }
 
     private isLogical(maxDays: number, day: number): boolean {
@@ -284,7 +287,7 @@ class ISO8601Localizer implements interfaces.localizer {
       let RangerInstance = new classes.Ranger();
       let validOffsets: Array<number> = RangerInstance.getRange(-11, 14);
 
-      return validOffsets.indexOf(offset) > -1 ? true : false;
+      return ( validOffsets.indexOf(offset) > -1 ) ? true : false;
 
     }
 
@@ -297,13 +300,13 @@ class ISO8601Localizer implements interfaces.localizer {
     private isLeapYear( year: number ): boolean {
 
         /*
-            Mathisfun(https://www.mathsisfun.com/leap-years.html):
+        Mathisfun(https://www.mathsisfun.com/leap-years.html):
 
-            "
-            Leap Years are any year that can be evenly divided by 4 (such as 2012, 2016, etc),
-            except if it can can be evenly divided by 100, then it isn't (such as 2100, 2200, etc),
-            except if it can be evenly divided by 400, then it is (such as 2000, 2400).
-            "
+        "
+        Leap Years are any year that can be evenly divided by 4 (such as 2012, 2016, etc),
+        except if it can can be evenly divided by 100, then it isn't (such as 2100, 2200, etc),
+        except if it can be evenly divided by 400, then it is (such as 2000, 2400).
+        "
         */
 
         return (
