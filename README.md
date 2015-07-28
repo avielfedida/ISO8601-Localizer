@@ -19,6 +19,12 @@ bower install iso8601-localizer
 
 Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.9/iso8601-localizer.min.js`
 
+As a client-side developer using Typescript, you might want to grab the type definitions:
+
+```
+tsd install iso8601-localizer
+```
+
 ## How to use
 
 ```javascript
