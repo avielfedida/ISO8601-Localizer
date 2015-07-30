@@ -17,7 +17,7 @@ Client-side users:
 bower install iso8601-localizer
 ```
 
-Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.0.9/iso8601-localizer.min.js`
+Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.1.0/iso8601-localizer.min.js`
 
 As a client-side developer using Typescript, you might want to grab the type definitions:
 
@@ -34,7 +34,7 @@ var localizeMe = '2015-06-02T14:13:12';
 var localized = new ISO8601Localizer(localizeMe).localize();
 ```
 
-Do you need your own `date/time` in ISO8601 format:
+Do you need your own date/time in ISO8601 format:
 
 ```javascript
 var alreadyLocalized = new Date();
@@ -72,26 +72,34 @@ Now go back to above **How to use** section and use as shown in those examples.
 ## The to method
 
 You may decide to localize a given ISO8601 but not to your own offset,
-but to another offset, for more info take a look [here](http://www.timeanddate.com/time/map/).
-
-Now to figure out what is the offset you need, checkout [timeanddate](http://www.timeanddate.com/time/zone/).
-
-Hop you've have noticed that valid offsets are between -11 to 14:
+but to another offset, for more info take a look [here](https://www.wikiwand.com/en/List_of_UTC_time_offsets).
 
 ```javascript
 var localizedTo = new ISO8601Localizer('2015-06-02T14:13:12').to(-5).localize();
 ```
 
-## Why do I need it?
+There are 2 types of fraction offsets: **.30min** and **.45min**:
 
-Some APIs will retrieve `date/time` in ISO8601 format, the problem is that the ISO8601 format will be
+```javascript
+// -4 hours and 30 minutes, you can pass -4.30 if you want.
+var localizedTo = new ISO8601Localizer('2015-06-02T14:13:12').to(-4.3).localize();
+
+// +8 hours and 45 minutes.
+var localizedTo = new ISO8601Localizer('2015-06-02T14:13:12').to(8.45).localize();
+```
+
+**Valid offsets**: 14, 13, 12.45, 12, 11.30, 11, 10.3, 10, 9.3, 9, 8.45, 8, 7, 6.3, 6, 5.45, 5.3, 5, 4.3, 4, 3.3, 3, 2, 1, 0, -1, -2, -3, -3.3, -4, -4.5, -5, -6, -7, -8, -9, -9.3, -10, -11, -12
+
+## Why I need this tool?
+
+Some APIs will retrieve date/time in ISO8601 format, the problem is that the ISO8601 format will be
 retrieved as UTC timezone, this framework is built upon this exact idea as I experienced a UTC retrieval myself.
 
 ## How it works?
 
-Javascript has a method called `getTimezoneOffset()` you can use on `Date` objects, the method return the number of minutes negative or positive depending on you timezone or a given offset(by the to() method), I use this value to localize a given ISO8601.
+Javascript has a method called `getTimezoneOffset()` you can use on `Date` objects, the method return the number of minutes negative or positive depending on you timezone offset, I use this value to localize a given ISO8601.
 
-Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result will be `2010-05-03:01:44:32`, there are more complicated cases such as leap year, or when the localization process forwards a month or even a year.
+Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result will be `2010-05-03:01:44:32`, there are more complicated cases such as leap year, fraction offsets or when the localization process forwards a month or even a year.
 
 ## Features
 
@@ -105,6 +113,6 @@ Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result wil
 
 Feel free to contact me via my email: `avielfedida@gmail.com`.
 
-###### Version: `1.0.9`
+###### Version: `1.1.0`
 
 ###### License: `MIT`

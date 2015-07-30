@@ -11,7 +11,6 @@ var ISO8601Localizer = (function () {
         if (!this.validOffset(offset)) {
             this.errorThrower(0);
         }
-        ;
         this.userOffset = offset;
         return this;
     };
@@ -47,6 +46,39 @@ var ISO8601Localizer = (function () {
         }
         if (operator === '=') {
             return fullMatch;
+        }
+        if (this.isFloat(offsetHours)) {
+            var offsetHoursRemainder = this.getRemainder(offsetHours);
+            var newMinute = 0;
+            var remainderMinutes = 0;
+            switch (offsetHoursRemainder) {
+                case 45:
+                    remainderMinutes = 45;
+                    break;
+                case 3:
+                    remainderMinutes = 30;
+                    break;
+                default:
+                    this.errorThrower(3);
+            }
+            if (operator === '+') {
+                newMinute = minute + remainderMinutes;
+            }
+            if (operator === '-') {
+                newMinute = minute - remainderMinutes;
+            }
+            if (newMinute > 59) {
+                minute = newMinute - 60;
+                offsetHours = Math.ceil(offsetHours);
+            }
+            else if (newMinute < 0) {
+                minute = newMinute + 60;
+                offsetHours = Math.ceil(offsetHours);
+            }
+            else {
+                minute = newMinute;
+                offsetHours = Math.floor(offsetHours);
+            }
         }
         if (operator === '+') {
             var newHour = hour = hour + offsetHours;
@@ -98,14 +130,24 @@ var ISO8601Localizer = (function () {
             stringedISO8601[4] + ':' +
             stringedISO8601[5];
     };
+    ISO8601Localizer.prototype.getRemainder = function (n) {
+        return parseInt(n.toString().split('.')[1]);
+    };
+    ISO8601Localizer.prototype.isFloat = function (n) {
+        return n === Number(n) && n % 1 !== 0;
+    };
     ISO8601Localizer.prototype.errorThrower = function (errorCode) {
         switch (errorCode) {
             case 0:
-                throw 'Invalid offset supplied, valid offsets are between -11 to 14';
+                throw 'Invalid offset supplied, valid offsets are between -12 to 14';
             case 1:
                 throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
             case 2:
                 throw 'Non logical date, please check that there are X days in month Y.';
+            case 3:
+                throw 'Unknown offset fraction, internal error, please contact the code author.';
+            case 4:
+                throw 'The method named to accept numbers only.';
             default:
                 throw 'Unknow error code.';
         }
@@ -131,8 +173,12 @@ var ISO8601Localizer = (function () {
         };
     };
     ISO8601Localizer.prototype.validOffset = function (offset) {
+        if (typeof offset !== 'number') {
+            this.errorThrower(4);
+        }
         var RangerInstance = new classes.Ranger();
-        var validOffsets = RangerInstance.getRange(-11, 14);
+        var validIntegerOffsets = RangerInstance.getRange(-12, 14);
+        var validOffsets = validIntegerOffsets.concat(arrays.floatingPointOffsets);
         return (validOffsets.indexOf(offset) > -1) ? true : false;
     };
     ISO8601Localizer.prototype.isValid = function (maybeValid) {

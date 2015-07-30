@@ -26,7 +26,7 @@ class ISO8601Localizer implements interfaces.localizer {
 
       if( ! this.validOffset(offset)) {
         this.errorThrower(0);
-      };
+      }
 
       this.userOffset = offset;
 
@@ -103,6 +103,68 @@ class ISO8601Localizer implements interfaces.localizer {
 
         }
 
+        if( this.isFloat(offsetHours) ) {
+
+          let offsetHoursRemainder: number = this.getRemainder(offsetHours);
+          let newMinute: number = 0;
+          let remainderMinutes: number = 0;
+
+          switch(offsetHoursRemainder) {
+
+            // 45 minutes
+            case 45:
+
+              remainderMinutes = 45;
+
+            break;
+
+            // 30 minutes, users can send .30, javascript will convert it to 0.3
+            case 3:
+
+              remainderMinutes = 30;
+
+            break;
+
+            default:
+
+              this.errorThrower(3);
+
+          }
+
+          if(operator === '+') {
+            newMinute = minute + remainderMinutes;
+          }
+
+          if(operator === '-') {
+            newMinute = minute - remainderMinutes;
+          }
+
+          /*
+          The Math.ceil(offsetHours) is used instead of Math.floor(offsetHours) + 1.
+          The floor is used to cancel the fraction and the +1 because newMinute > 59
+          or newMinute < 0 either way the system is using absolute offsetHours
+          (the system check operator variable).
+          */
+          if( newMinute > 59 ) {
+
+            minute = newMinute - 60;                                     // ---------- Final
+            offsetHours = Math.ceil(offsetHours);
+
+          } else if( newMinute < 0 ) {
+
+            minute = newMinute + 60;                                     // ---------- Final
+            offsetHours = Math.ceil(offsetHours);
+
+          } else {
+
+            minute = newMinute;                                          // ---------- Final
+            offsetHours = Math.floor(offsetHours);
+
+          }
+
+        }
+
+        // The following actions will take place only for integers offsets.
         if(operator === '+') {
 
             let newHour = hour = hour + offsetHours;                     // ---------- Final(maybe)
@@ -221,6 +283,18 @@ class ISO8601Localizer implements interfaces.localizer {
 
     }
 
+    private getRemainder(n): number {
+
+       return parseInt( n.toString().split('.')[1] );
+
+    }
+
+    private isFloat(n): boolean {
+
+        return n === Number(n) && n % 1 !== 0;
+
+    }
+
     // I removed the break statements below due to the throw statements(the break will never be reached).
     private errorThrower(errorCode: number): void {
 
@@ -228,7 +302,7 @@ class ISO8601Localizer implements interfaces.localizer {
 
         case 0:
 
-          throw 'Invalid offset supplied, valid offsets are between -11 to 14';
+          throw 'Invalid offset supplied, valid offsets are between -12 to 14';
 
         case 1:
 
@@ -237,6 +311,10 @@ class ISO8601Localizer implements interfaces.localizer {
         case 2:
 
           throw 'Non logical date, please check that there are X days in month Y.';
+
+        case 3:
+
+          throw 'Unknown offset fraction, internal error, please contact the code author.';
 
         default:
 
@@ -285,7 +363,8 @@ class ISO8601Localizer implements interfaces.localizer {
     private validOffset(offset: number): boolean {
 
       let RangerInstance = new classes.Ranger();
-      let validOffsets: Array<number> = RangerInstance.getRange(-11, 14);
+      let validIntegerOffsets: Array<number> = RangerInstance.getRange(-12, 14);
+      let validOffsets: Array<number> = validIntegerOffsets.concat(arrays.floatingPointOffsets);
 
       return ( validOffsets.indexOf(offset) > -1 ) ? true : false;
 
