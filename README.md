@@ -78,7 +78,7 @@ but to another offset, for more info take a look [here](https://www.wikiwand.com
 var localizedTo = new ISO8601Localizer('2015-06-02T14:13:12').to(-5).localize();
 ```
 
-There are 2 types of fraction offsets: **.30min** and **.45min**:
+There are 2 types of fractionated offsets: **.30min** and **.45min**:
 
 ```javascript
 // -4 hours and 30 minutes, you can pass -4.30 if you want.
