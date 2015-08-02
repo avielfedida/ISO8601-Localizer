@@ -4,9 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Localizer</title>
 	<script src="iso8601-localizer.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/code-highlighter/1.1.1/code-highlighter.min.js"></script>
+	<script src="//cdn.jsdelivr.net/code-highlighter/1.1.1/code-highlighter.min.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Noto+Sans:400italic' rel='stylesheet' type='text/css'>
 	<script>
+
 
 		(function(window, document) {
 
@@ -29,55 +30,97 @@
 			utils.addListener(window, 'load', function(){
 
 				function intervalCallback() {
+
 					var toISOString = new Date().toISOString();
 					inp.value = toISOString.slice(0, toISOString.lastIndexOf('.'));
+
 					try {
 
 						result.innerHTML = new ISO8601Localizer(toISOString).localize();
 						inp.className = 'valid';
 
 					} catch( err ) {
+
 						console.log(err);
 						inp.className = 'invalid';
 
 					}
+
 				}
 
-				function keyDownUpCallback() {
+				function keyDownUpChangeCallback() {
 
-					try {
+				  if(useOffset.checked) {
 
-						result.innerHTML = new ISO8601Localizer(inp.value).localize();
-						inp.className = 'valid';
+				    useOffset.style.display = 'none';
+				    offset.style.display = 'block';
 
-					} catch( err ) {
-						console.log(err);
-						inp.className = 'invalid';
+				    try {
 
-					}
+					    clearInterval(interval);
+				      result.innerHTML = new ISO8601Localizer(inp.value).to(parseFloat(offset.value)).localize();
+  						inp.className = 'valid';
+
+  					} catch( err ) {
+  						console.log(err);
+  						inp.className = 'invalid';
+
+  					}
+
+				  } else {
+
+  				  try {
+
+  						result.innerHTML = new ISO8601Localizer(inp.value).localize();
+  						inp.className = 'valid';
+
+  					} catch( err ) {
+
+  						console.log(err);
+  						inp.className = 'invalid';
+
+  					}
+
+				  }
 
 				}
 
 				var inp = document.querySelector('input[name]');
 				var result = document.getElementById('result');
-
+				var useOffset = document.getElementById('useOffset');
+				var offset = document.getElementById('offset');
 				var interval = setInterval(intervalCallback, 1000);
+
+
+				utils.addListener(useOffset, 'change', keyDownUpChangeCallback);
+				utils.addListener(offset, 'change', keyDownUpChangeCallback);
+
+
 
 				utils.addListener(inp, 'focus', function() {
 
-					clearInterval(interval);
+          if( ! useOffset.checked) {
 
-					utils.addListener(inp, 'keydown', keyDownUpCallback);
-					utils.addListener(inp, 'keyup', keyDownUpCallback);
+            clearInterval(interval);
+
+          }
+
+          utils.addListener(inp, 'keydown', keyDownUpChangeCallback);
+  				utils.addListener(inp, 'keyup', keyDownUpChangeCallback);
 
 				});
 
 				utils.addListener(inp, 'blur', function() {
 
-					utils.removeListener(inp, 'keydown', keyDownUpCallback);
-					utils.removeListener(inp, 'keyup', keyDownUpCallback);
 
-					interval = setInterval(intervalCallback, 1000);
+          if( ! useOffset.checked) {
+
+  					interval = setInterval(intervalCallback, 1000);
+
+          }
+
+          utils.removeListener(inp, 'keydown', keyDownUpChangeCallback);
+  				utils.removeListener(inp, 'keyup', keyDownUpChangeCallback);
 
 				});
 
@@ -105,53 +148,10 @@
 		text-align: center;
 	}
 
-	p {
-		background-color: #ccc;
-		padding: 5px;
-	}
-
-	div {
-		padding: 20px;
-	}
-
-	p, div {
-		text-align: center;
-		margin: 0;
-	}
-
-	div p {
-		padding: 25px;
-		border: 0;
-		text-align: left;
-	}
-
-	h3 {
-		padding: 5px;
-		color: #fff;
-		margin-bottom: 0;
-		background-color: #888;
-	}
-
-	h2 {
-		font-weight: normal;
-		background-color: #777;
-		color: #fff;
-		padding: 10px 0;
-		text-align: center;
-		margin: 0;
-	}
-
 	.code-highlighter {
 		margin: 20px auto;
-		width: 750px;
 		padding: 10px;
-	}
-
-	span.center {
-		background-color: #777;
-		color: #fff;
-		padding: 10px 15px;
-		font-size: 1.2em;
+		width: 500px;
 	}
 
 	input.valid {
@@ -164,7 +164,7 @@
 
 	input, #result {
 		background-color: #777;
-		width: 750px;
+		width: 400px;
 		border: none;
 		display: block;
 		padding: 25px 50px;
@@ -174,54 +174,96 @@
 		color: #fff;
 	}
 
-	a {
-		text-decoration: none;
-		border-bottom: 1px solid #fff;
-		color: #111;
+	.center {
+	  display: inline-block;
+	  margin: 0 auto;
+	  width: 200px;
 	}
 
-	a:hover {
-		border-bottom-color: #111;
+	#useOffset, select {
+	  width: 200px;
+	  margin-top: 0;
+	  margin-bottom: 0;
+	  color: #444;
+	  font-size: 3em;
+	  background-image: linear-gradient(360deg, #bbbbbb 60%,#FFF 100%);
+	  height: 200px;
 	}
 
-	.smaller {
-		font-size: 1.2em;
+	#offset {
+	  display: none;
 	}
+
 	</style>
 </head>
 <body>
-	<section>
 
-	<h2>Valid/Invalid formats</h2>
+	 <section>
 
-	<p>A well described code examples and use cases are provided at the <a target="_blank" href="https://github.com/avielfedida/ISO8601-Localizer">github repository</a>.</p>
-
-	<p>ISO8601 has many formats, the framework require a specific format...</p>
-
-	<div>
-
-		<h3>Valid</h3>
-		<p>2012-06-12T13:14:15 <small>( That is all the framework need )</small></p>
-		<p>2012-06-12t13:14:15 <small>( Lowercase t will also work )</small></p>
-		<p>blabla2012-06-12T13:14:15blabla <small>( Even some blabla will work )</small></p>
-		<p>2015-06-14T16:11:51.678Z <small>(Time zone and second fractions ignored)</small></p>
-
-	</div>
-
-	<div>
-
-		<h3>Invalid</h3>
-		<p>2012-6-12T13:14:15 <small>( Missing 0 before 6 )</small></p>
-		<p>2012-06-12G13:14:15 <small>( G instead of T or t )</small></p>
-		<p>blabla2012-06-12blabla13:14:15blabla <small>( blabla in the middle )</small></p>
-		<p>015-06-14T16:11:51.678Z <small>(4 digists year, not 3)</small></p>
-
-	</div>
-
-	<h2 class="smaller">Invalid ISO8601 will thrown an error, so while playing with the live example below, open the console</h2>
 		<input type="text" name="ISO8601">
-		<span class="center">&darr;</span>
+
+    <div class="center">
+      <input title=".to(-+offset)" id="useOffset" type="checkbox" name="useOffset" value="Bike">
+  	  <select title="offset" id="offset" name="offset">
+  	    <option value="14">+14</option>
+  	    <option value="13">+13</option>
+  	    <option value="12.45">+12:45</option>
+  	    <option value="12">+12</option>
+  	    <option value="11.3">+11:30</option>
+  	    <option value="11">+11</option>
+  	    <option value="10.3">+10:30</option>
+  	    <option value="10">+10</option>
+  	    <option value="9.3">+9:30</option>
+  	    <option value="9">+9</option>
+  	    <option value="8.45">+8:45</option>
+  	    <option value="8">+8</option>
+  	    <option value="7">+7</option>
+  	    <option value="6.3">+6:30</option>
+  	    <option value="6">+6</option>
+  	    <option value="5.45">+5:45</option>
+  	    <option value="5.3">+5:30</option>
+  	    <option value="5">+5</option>
+  	    <option value="4.3">+4:30</option>
+  	    <option value="4">+4</option>
+  	    <option value="3.3">+3:30</option>
+  	    <option value="3">+3</option>
+  	    <option value="2">+2</option>
+  	    <option value="1">+1</option>
+  	    <option value="0">0</option>
+  	    <option value="-1">-1</option>
+  	    <option value="-2">-2</option>
+  	    <option value="-3">-3</option>
+  	    <option value="-3.3">-3:30</option>
+  	    <option value="-4">-4</option>
+  	    <option value="-4.3">-4:30</option>
+  	    <option value="-5">-5</option>
+  	    <option value="-6">-6</option>
+  	    <option value="-7">-7</option>
+  	    <option value="-8">-8</option>
+  	    <option value="-9">-9</option>
+  	    <option value="-9.3">-9:30</option>
+  	    <option value="-10">-10</option>
+  	    <option value="-11">-11</option>
+  	    <option value="-12">-12</option>
+  	  </select>
+
+    </div>
 		<section id="result"></section>
+
+		<textarea class="code-highlighter" data-lines="1.2em" data-color-scheme="apple" data-abs-width data-syntax="javascript">
+/* Browserify + client-side users */
+bower install iso8601-localizer
+
+/*  CDN for client-side users */
+cdn.jsdelivr.net/iso8601-localizer/1.1.0/iso8601-localizer.min.js
+
+/*  TypeScript type definitions for typescript users */
+tsd install iso8601-localizer
+
+/*  NodeJS users */
+npm install iso8601-localizer
+</textarea>
+
 	</section>
 </body>
 </html>
