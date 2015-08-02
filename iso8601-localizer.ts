@@ -22,10 +22,12 @@ class ISO8601Localizer implements interfaces.localizer {
 
     }
 
-    public to(offset: number): interfaces.localizer {
+    public to( offset: number ): interfaces.localizer {
 
       if( ! this.validOffset(offset)) {
+
         this.errorThrower(0);
+
       }
 
       this.userOffset = offset;
@@ -132,11 +134,15 @@ class ISO8601Localizer implements interfaces.localizer {
           }
 
           if(operator === '+') {
+
             newMinute = minute + remainderMinutes;
+
           }
 
           if(operator === '-') {
+
             newMinute = minute - remainderMinutes;
+
           }
 
           /*
@@ -283,20 +289,20 @@ class ISO8601Localizer implements interfaces.localizer {
 
     }
 
-    private getRemainder(n): number {
+    private getRemainder( n ): number {
 
        return parseInt( n.toString().split('.')[1] );
 
     }
 
-    private isFloat(n): boolean {
+    private isFloat( n ): boolean {
 
         return n === Number(n) && n % 1 !== 0;
 
     }
 
     // I removed the break statements below due to the throw statements(the break will never be reached).
-    private errorThrower(errorCode: number): void {
+    private errorThrower( errorCode: number ): void {
 
       switch(errorCode) {
 
@@ -316,6 +322,10 @@ class ISO8601Localizer implements interfaces.localizer {
 
           throw 'Unknown offset fraction, internal error, please contact the code author.';
 
+        case 4:
+
+          throw 'The method named to accept numbers only.';
+
         default:
 
           throw 'Unknow error code.';
@@ -324,7 +334,7 @@ class ISO8601Localizer implements interfaces.localizer {
 
     }
 
-    private isLogical(maxDays: number, day: number): boolean {
+    private isLogical( maxDays: number, day: number ): boolean {
 
         return day <= maxDays;
 
@@ -360,7 +370,13 @@ class ISO8601Localizer implements interfaces.localizer {
 
     }
 
-    private validOffset(offset: number): boolean {
+    private validOffset( offset: number ): boolean {
+
+      if(typeof offset !== 'number') {
+
+        this.errorThrower(4);
+
+      }
 
       let RangerInstance = new classes.Ranger();
       let validIntegerOffsets: Array<number> = RangerInstance.getRange(-12, 14);
