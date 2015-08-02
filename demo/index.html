@@ -8,7 +8,6 @@
 	<link href='http://fonts.googleapis.com/css?family=Noto+Sans:400italic' rel='stylesheet' type='text/css'>
 	<script>
 
-
 		(function(window, document) {
 
 			var utils = {
@@ -91,11 +90,8 @@
 				var offset = document.getElementById('offset');
 				var interval = setInterval(intervalCallback, 1000);
 
-
 				utils.addListener(useOffset, 'change', keyDownUpChangeCallback);
 				utils.addListener(offset, 'change', keyDownUpChangeCallback);
-
-
 
 				utils.addListener(inp, 'focus', function() {
 
@@ -197,11 +193,8 @@
 	</style>
 </head>
 <body>
-
-	 <section>
-
+	<section>
 		<input type="text" name="ISO8601">
-
     <div class="center">
       <input title=".to(-+offset)" id="useOffset" type="checkbox" name="useOffset" value="Bike">
   	  <select title="offset" id="offset" name="offset">
@@ -246,10 +239,8 @@
   	    <option value="-11">-11</option>
   	    <option value="-12">-12</option>
   	  </select>
-
     </div>
 		<section id="result"></section>
-
 		<textarea class="code-highlighter" data-lines="1.2em" data-color-scheme="apple" data-abs-width data-syntax="javascript">
 /* Browserify + client-side users */
 bower install iso8601-localizer
@@ -263,7 +254,6 @@ tsd install iso8601-localizer
 /*  NodeJS users */
 npm install iso8601-localizer
 </textarea>
-
 	</section>
 </body>
 </html>
