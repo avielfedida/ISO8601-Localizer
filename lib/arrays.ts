@@ -1,5 +1,12 @@
 module arrays {
 
+	export let returnAsTypes = [
+
+		'string',
+		'object'
+
+	];
+
 	export let monthsDays = [
 
 		31, 	// January

@@ -12,8 +12,10 @@ class ISO8601Localizer implements interfaces.localizer {
 
     private userISO8601: string;
 
+    private userReturnAs: string;
+
     // Partially Stricted(no ^ and $): 2013-01-05T04:13:00
-    private ISO8601Pattern: RegExp = /(\d{4})-([0-1][0-9])-([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])/;
+    private ISO8601Pattern: RegExp = /(\d{4})\-([0-1][0-9])\-([0-3][0-9])T([0-2][0-9])\:([0-5][0-9])\:([0-5][0-9])/;
 
     public constructor( userISO8601: string ) {
 
@@ -37,7 +39,7 @@ class ISO8601Localizer implements interfaces.localizer {
     }
 
     // There are few variables set here for clarification and never used such as: newerDay, newerMonth and newYear.
-    public localize(): string {
+    public localize(): string | interfaces.asObject {
 
         let upperCaseISO8601 = this.userISO8601.toUpperCase();
 
@@ -270,22 +272,76 @@ class ISO8601Localizer implements interfaces.localizer {
         }
 
         let [...ISO8601]: number[] = [year, month, day, hour, minute, second];
-        let stringedISO8601: string[]  = [];
 
-        for(let k in ISO8601) {
+        if(this.userReturnAs) {
 
-            let toStringISO8601 = ISO8601[k].toString();
+            switch(this.userReturnAs) {
 
-            stringedISO8601.push(toStringISO8601.length === 1 ? "0" + toStringISO8601 : toStringISO8601);
+              case 'object':
+
+                return this.returnAsObject(ISO8601);
+
+              default:
+
+                return this.returnAsString(ISO8601);
+
+            }
+
+        } else {
+
+          return this.returnAsString(ISO8601);
 
         }
 
-        return  stringedISO8601[0] + '-' +
-                stringedISO8601[1] + '-' +
-                stringedISO8601[2] + 'T' +
-                stringedISO8601[3] + ':' +
-                stringedISO8601[4] + ':' +
-                stringedISO8601[5];
+    }
+
+    public returnAs(as: string): interfaces.localizer {
+
+      if( ! this.validReturnAs(as)) {
+
+          this.errorThrower(5);
+
+      }
+
+      this.userReturnAs = as;
+
+      return this;
+
+    }
+
+    private validReturnAs( returnAs: string ) {
+
+      return ( arrays.returnAsTypes.indexOf( returnAs ) > - 1 ) ? true: false;
+
+    }
+
+    private returnAsString( ISO8601: number[] ): string {
+
+      let stringedISO8601Object = this.returnAsObject(ISO8601);
+
+      return  stringedISO8601Object.year + '-' +
+              stringedISO8601Object.month + '-' +
+              stringedISO8601Object.day + 'T' +
+              stringedISO8601Object.hour + ':' +
+              stringedISO8601Object.minute + ':' +
+              stringedISO8601Object.second;
+
+    }
+
+    private returnAsObject( ISO8601: number[] ): interfaces.asObject {
+
+      let stringedISO8601Object: interfaces.asObject = { year: '', month: '', day: '', hour: '', minute: '', second: '' };
+      let ISO8601ParameterOrder = ['year', 'month', 'day', 'hour', 'minute', 'second'];
+
+      for(let k in ISO8601) {
+
+          let toStringISO8601 = ISO8601[k].toString();
+
+          stringedISO8601Object[ISO8601ParameterOrder[k]] = (toStringISO8601.length === 1 ? "0" + toStringISO8601 : toStringISO8601);
+
+      }
+
+      return stringedISO8601Object;
 
     }
 
@@ -325,6 +381,10 @@ class ISO8601Localizer implements interfaces.localizer {
         case 4:
 
           throw 'The method named to accept numbers only.';
+
+        case 5:
+
+          throw 'Invalid argument supplied to returnAs method.';
 
         default:
 

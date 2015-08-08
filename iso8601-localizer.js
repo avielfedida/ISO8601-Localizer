@@ -3,7 +3,7 @@ var arrays = require('./lib/arrays');
 var classes = require('./lib/classes');
 var ISO8601Localizer = (function () {
     function ISO8601Localizer(userISO8601) {
-        this.ISO8601Pattern = /(\d{4})-([0-1][0-9])-([0-3][0-9])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])/;
+        this.ISO8601Pattern = /(\d{4})\-([0-1][0-9])\-([0-3][0-9])T([0-2][0-9])\:([0-5][0-9])\:([0-5][0-9])/;
         this.userISO8601 = userISO8601;
         this.userOffset = new Date().getTimezoneOffset() / -60;
     }
@@ -118,17 +118,45 @@ var ISO8601Localizer = (function () {
             }
         }
         var ISO8601 = [year, month, day, hour, minute, second].slice(0);
-        var stringedISO8601 = [];
+        if (this.userReturnAs) {
+            switch (this.userReturnAs) {
+                case 'object':
+                    return this.returnAsObject(ISO8601);
+                default:
+                    return this.returnAsString(ISO8601);
+            }
+        }
+        else {
+            return this.returnAsString(ISO8601);
+        }
+    };
+    ISO8601Localizer.prototype.returnAs = function (as) {
+        if (!this.validReturnAs(as)) {
+            this.errorThrower(5);
+        }
+        this.userReturnAs = as;
+        return this;
+    };
+    ISO8601Localizer.prototype.validReturnAs = function (returnAs) {
+        return (arrays.returnAsTypes.indexOf(returnAs) > -1) ? true : false;
+    };
+    ISO8601Localizer.prototype.returnAsString = function (ISO8601) {
+        var stringedISO8601Object = this.returnAsObject(ISO8601);
+        return stringedISO8601Object.year + '-' +
+            stringedISO8601Object.month + '-' +
+            stringedISO8601Object.day + 'T' +
+            stringedISO8601Object.hour + ':' +
+            stringedISO8601Object.minute + ':' +
+            stringedISO8601Object.second;
+    };
+    ISO8601Localizer.prototype.returnAsObject = function (ISO8601) {
+        var stringedISO8601Object = { year: '', month: '', day: '', hour: '', minute: '', second: '' };
+        var ISO8601ParameterOrder = ['year', 'month', 'day', 'hour', 'minute', 'second'];
         for (var k in ISO8601) {
             var toStringISO8601 = ISO8601[k].toString();
-            stringedISO8601.push(toStringISO8601.length === 1 ? "0" + toStringISO8601 : toStringISO8601);
+            stringedISO8601Object[ISO8601ParameterOrder[k]] = (toStringISO8601.length === 1 ? "0" + toStringISO8601 : toStringISO8601);
         }
-        return stringedISO8601[0] + '-' +
-            stringedISO8601[1] + '-' +
-            stringedISO8601[2] + 'T' +
-            stringedISO8601[3] + ':' +
-            stringedISO8601[4] + ':' +
-            stringedISO8601[5];
+        return stringedISO8601Object;
     };
     ISO8601Localizer.prototype.getRemainder = function (n) {
         return parseInt(n.toString().split('.')[1]);
@@ -148,6 +176,8 @@ var ISO8601Localizer = (function () {
                 throw 'Unknown offset fraction, internal error, please contact the code author.';
             case 4:
                 throw 'The method named to accept numbers only.';
+            case 5:
+                throw 'Invalid returnAs string supplied in options object to localize method.';
             default:
                 throw 'Unknow error code.';
         }

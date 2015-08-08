@@ -17,7 +17,7 @@ Client-side users:
 bower install iso8601-localizer
 ```
 
-Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.1.0/iso8601-localizer.min.js`
+Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.2.0/iso8601-localizer.min.js`
 
 As a client-side developer using Typescript, you might want to grab the type definitions:
 
@@ -93,6 +93,24 @@ var localizedTo = new ISO8601Localizer('2015-06-02T14:13:12').to(8.45).localize(
 ```
 [14, 13, 12.45, 12, 11.3, 11, 10.3, 10, 9.3, 9, 8.45, 8, 7, 6.3, 6, 5.45, 5.3, 5, 4.3, 4, 3.3, 3, 2, 1, 0, -1, -2, -3, -3.3, -4, -4.3, -5, -6, -7, -8, -9, -9.3, -10, -11, -12]
 ```
+
+## The returnAs method
+
+By default when you call to `localize` method the returned value is a valid ISO8601 string but you can use `returnAs` method to change the default behavior:
+
+```javascript
+// localizedTo = { day: "02", hour: "09", minute: "13", month: "06", second: "12", year: "2015" }
+var localizedTo = new ISO8601Localizer('2015-06-02T14:13:12').to(-5).returnAs('object').localize();
+```
+
+The above call to `licalize` will result with an object rather than a string.
+
+**Valid returnAs values**:
+
+The returnAs method takes a string to indicate the requested return value, those are the valid strings you can pass:
+
+* string(**default behavior**)
+* object
 
 ## Why I need this tool?
 
