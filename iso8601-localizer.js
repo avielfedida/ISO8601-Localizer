@@ -177,7 +177,7 @@ var ISO8601Localizer = (function () {
             case 4:
                 throw 'The method named to accept numbers only.';
             case 5:
-                throw 'Invalid argument supplied to returnAs method.';
+                throw 'Invalid string argument supplied to returnAs method.';
             default:
                 throw 'Unknow error code.';
         }

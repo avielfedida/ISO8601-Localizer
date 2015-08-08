@@ -384,7 +384,7 @@ class ISO8601Localizer implements interfaces.localizer {
 
         case 5:
 
-          throw 'Invalid argument supplied to returnAs method.';
+          throw 'Invalid string argument supplied to returnAs method.';
 
         default:
 
