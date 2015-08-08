@@ -6,5 +6,5 @@
 4. Update iso8601-localizer.min.js and iso8601-localizer.min.js.map at the demo folder
 5. Bump bower.json version
 6. Bump package.json version
-7. Bump README.md version
+7. Bump README.md version(at the bottom of the page)
 8. Update the cdn link version at README.md
