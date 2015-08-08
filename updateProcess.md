@@ -8,3 +8,4 @@
 6. Bump package.json version
 7. Bump README.md version(at the bottom of the page)
 8. Update the cdn link version at README.md
+9. Update the cdn link version at the demo index.html
