@@ -9,4 +9,4 @@
 7. Bump README.md version(at the bottom of the page)
 8. Update the cdn link version at README.md
 9. Update the cdn link version at the demo index.html
-10. Don't forget to 'npm publish' after push --tags
+10. Don't forget to 'npm publish' after 'push --tags'
