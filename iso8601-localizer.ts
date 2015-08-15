@@ -40,7 +40,13 @@ class ISO8601Localizer implements interfaces.localizer {
 
     // There are few variables set here for clarification and never used such as: newerDay, newerMonth and newYear.
     public localize(): string | interfaces.asObject {
-
+        
+        if( typeof this.userISO8601 !== 'string' ) {
+            
+            this.errorThrower(6);
+            
+        }
+        
         let upperCaseISO8601 = this.userISO8601.toUpperCase();
 
         if( ! this.isValid(upperCaseISO8601) ) {
@@ -297,6 +303,12 @@ class ISO8601Localizer implements interfaces.localizer {
 
     public returnAs(as: string): interfaces.localizer {
 
+      if( typeof as !== 'string' ) {
+          this.errorThrower(7);
+      }
+      
+      as = as.toLowerCase();
+
       if( ! this.validReturnAs(as)) {
 
           this.errorThrower(5);
@@ -357,40 +369,68 @@ class ISO8601Localizer implements interfaces.localizer {
 
     }
 
-    // I removed the break statements below due to the throw statements(the break will never be reached).
     private errorThrower( errorCode: number ): void {
+        
+      let error: string = '';
+      let className = this.constructor.toString().match(/\w+/g)[1];
 
       switch(errorCode) {
 
         case 0:
 
-          throw 'Invalid offset supplied, valid offsets are between -12 to 14';
+          error = 'Invalid offset supplied, valid offsets are between -12 to 14';
 
+        break;
+          
         case 1:
 
-          throw 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
+          error = 'Invalid ISO8601, try something like(case insensitive, T may be t): 2005-06-03T13:04:32';
+
+        break;
 
         case 2:
 
-          throw 'Non logical date, please check that there are X days in month Y.';
+          error = 'Non logical date, please check that there are X days in month Y.';
+
+        break;
 
         case 3:
 
-          throw 'Unknown offset fraction, internal error, please contact the code author.';
+          error = 'Unknown offset fraction, internal error, please contact the code author.';
+
+        break;
 
         case 4:
 
-          throw 'The method named to accept numbers only.';
+          error = 'to method parameter type is not a number.';
+
+        break;
 
         case 5:
 
-          throw 'Invalid string argument supplied to returnAs method.';
+          error = 'Invalid string argument supplied to returnAs method.';
+
+        break;
+
+        case 6:
+        
+          error = 'Constructor parameter type is not a string.';
+
+        break;
+
+        case 7:
+        
+          error = 'returnAs method parameter type is not a string.';
+
+        break;
 
         default:
 
-          throw 'Unknow error code.';
+          error = 'Unknow error code.';
 
       }
+      
+      throw ( className + ': ' + error );
 
     }
 
