@@ -1,7 +1,7 @@
 {
   "name": "iso8601-localizer",
   "main": "iso8601-localizer.min.js",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "homepage": "https://github.com/avielfedida/ISO8601-Localizer",
   "authors": [
     "Aviel Fedida <avielfedida@gmail.com>"

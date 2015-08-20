@@ -17,7 +17,7 @@ Client-side users:
 bower install iso8601-localizer
 ```
 
-Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.2.1/iso8601-localizer.min.js`
+Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.2.2/iso8601-localizer.min.js`
 
 As a client-side or server-side developer using Typescript, you might want to grab the type definitions:
 
@@ -135,6 +135,6 @@ Given `+3h` while the date/time are `2010-05-02:22:44:32`, the return result wil
 
 Feel free to contact me via my email: `avielfedida@gmail.com`.
 
-###### Version: `1.2.1`
+###### Version: `1.2.2`
 
 ###### License: `MIT`

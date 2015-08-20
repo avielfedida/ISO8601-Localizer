@@ -123,6 +123,13 @@ class ISO8601Localizer implements interfaces.localizer {
 
             // 45 minutes
             case 45:
+            /*
+            When using .to() method the user must use .3 or .45 BUT when getTimezoneOffset value is
+            used(when not using the to method), well lets take for example +5.45, the number of minutes returned
+            is 60*5+45=345, now let divide 345/60=5.75, the fraction is .75, the case 45 is as explained because
+            the use must use .3 or .45.
+            */
+            case 75:
 
               remainderMinutes = 45;
 
@@ -130,6 +137,9 @@ class ISO8601Localizer implements interfaces.localizer {
 
             // 30 minutes, users can send .30, javascript will convert it to 0.3
             case 3:
+
+            // Same explanation as case 75, this case +5.3 is 60*5+30=330 and 330/60=5.5
+            case 5:
 
               remainderMinutes = 30;
 
