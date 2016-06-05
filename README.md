@@ -22,7 +22,7 @@ Or would you prefer a cdn: `//cdn.jsdelivr.net/iso8601-localizer/1.2.2/iso8601-l
 As a client-side or server-side developer using Typescript, you might want to grab the type definitions:
 
 ```
-tsd install iso8601-localizer
+typings install iso8601-localizer
 ```
 
 ## How to use
